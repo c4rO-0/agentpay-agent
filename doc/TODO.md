@@ -3,10 +3,10 @@
 - [x] Exclude local rehearsal records and Protocol archives from Git tracking while preserving all local files.
 - [ ] Arrange public Protocol dependency distribution before fresh-clone installation; disclosure review is deferred, local tarballs and current dependency references remain.
 - [ ] Before public release, sanitize repository history and review documentation links to excluded local evidence. Ignoring files does not remove historical content.
-- [ ] Align template version with Agent/Provider tags and connect Market remote-tag refresh; no local sibling fallback or GitHub Release requirement.
+- [x] Align template version with Agent/Provider tags and implement Market remote-tag refresh; no local sibling fallback or GitHub Release requirement. Deployment acceptance remains separate.
 
 - [x] Move official editable Skill template and independent version/release packaging into Agent; Market distributes a digest-checked pinned artifact only.
-- [ ] Commit reviewed template changes, create an Agent template tag/release and publish ZIP + manifest when authorized; coordinate matching User capability rollout.
+- [ ] Publish/verify Agent v0.1.1 tag with committed ZIP + manifest; configure Market remote repository and deploy with matching User capabilities. No separate template version or GitHub Release is required.
 - [ ] Investigate retained publication schema-test failure: WALLET_MAPPING_SCHEMA_INVALID in the pre-existing fresh-schema fixture. Template artifact/interop checks pass; full suite is not green.
 
 - [x] Align Provider HTTP/HTTPS support with types 0.14.1; keep platform credential and local-control protection, original profile hashes and historical identity. Controlled source verification recorded in progress.

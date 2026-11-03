@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import {buildSkillTemplate} from '../scripts/lib/skill-template-release.mjs';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-test('official generic template is reproducible and has a version independent of the example package',async()=>{
+test('official generic template is reproducible and uses the Agent version, independently of the example package',async()=>{
  const a=await buildSkillTemplate(),b=await buildSkillTemplate();assert.deepEqual(a,b);
+ assert.equal(a.manifest.version,JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).version);
  assert.equal(a.manifest.sha256,createHash('sha256').update(a.bytes).digest('hex'));assert.equal(a.manifest.byteLength,a.bytes.length);
  assert.match(a.manifest.filename,/^agentpay-skill-template-\d+\.\d+\.\d+\.zip$/);
  const manifest=JSON.parse(await readFile(new URL('../templates/skill/agentpay.json',import.meta.url),'utf8'));

@@ -1,5 +1,31 @@
 # Agent Development Instructions
 
+## Public repository boundary
+
+This repository is public (confirmed by the owner on 2026-11-03). Treat every
+commit, push, tag and release artifact as public disclosure.
+
+- Never commit private keys, Session Keys, passwords, API keys, login tokens,
+  Provider credentials, signed payment payloads, private request/output data,
+  database dumps, live runtime configuration or unredacted operational logs.
+- Examples and tests must use clearly synthetic credentials and identities.
+  Do not copy real account emails, private host paths, deployment inventories or
+  participant records into public documentation or fixtures.
+- `doc/records/` and `vendor/protocol/` are intentionally ignored and local-only.
+  Preserve local files; never force-add them or remove their ignore rules without
+  explicit owner authorization and a disclosure review. Protocol publication and
+  dependency distribution are separate decisions.
+- Before committing, inspect staged diffs and newly added files for sensitive
+  content. Before pushing or publishing, inspect all outgoing commits and the
+  actual archive contents, including generated files and nested dependencies.
+  `.gitignore` alone is not a security check.
+- If sensitive content is found, stop the affected publication and report its
+  location and type without printing its value. Do not assume a later deletion
+  or history rewrite removes already disclosed secrets; coordinate revocation
+  with the owner. Never silently rewrite history.
+- Keep public evidence sanitized and independently readable. Links to ignored
+  local records are not usable evidence for public readers.
+
 This repository owns Skill execution, not
 payment authority or custody. Never accept caller-supplied price, trust,
 funding, or payout facts. Keep private requests/output between client and
@@ -24,4 +50,7 @@ documentation. Update local links and the catalog when reorganizing documents.
 Agent owns `templates/skill/` and `templates/skill-release.json`. Keep this template
 business-neutral; random is a reference service, not a core requirement. Build/release
 with the documented template command. Shared transport/recovery remains in User.
-Market consumes a pinned ZIP; do not reintroduce duplicate source generators there.
+Market consumes a validated prebuilt ZIP from remote Agent version tags, retaining
+a bundled fallback. Do not reintroduce duplicate source generators there.
+Template versions come from Agent package.json; commit templates/release artifacts
+before tagging. Do not use independent template tags or require GitHub Releases.

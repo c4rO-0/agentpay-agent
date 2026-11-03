@@ -1,5 +1,20 @@
 # AgentPay Provider Server Progress
 
+## Remote Agent template tags — 2026-11-03
+
+Supersedes independent template release planning below. Agent template version now
+follows its package/Provider version; v0.1.1 artifacts include MIT and editable
+input/output hooks. Market uses MARKET_SKILL_TEMPLATE_REPOSITORY for public GitHub
+tag checks, hourly in background, with bounded downloads, digest/ZIP checks, atomic
+local persistence and last-valid fallback. No sibling checkout, GitHub Release
+requirement, request-time network calls or remote code execution.
+
+Verified: Agent packaging test, five Market sync regressions, artifact validation,
+and generated-template/shared-client interoperability passed; Market API no-emit
+typecheck passed. Actual public-tag verification is next; deployed Market refresh
+and participant acceptance are not yet claimed.
+
+
 ## License — 2026-11-03
 
 Owner selected MIT for Agent and the editable Skill template, allowing commercial

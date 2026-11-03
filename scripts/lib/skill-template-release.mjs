@@ -3,7 +3,9 @@ import {createHash} from 'node:crypto';
 import {writeSkillZip} from '../../src/skill-zip.mjs';
 const root=new URL('../../templates/',import.meta.url);
 export async function buildSkillTemplate(){
- const config=JSON.parse(await readFile(new URL('skill-release.json',root),'utf8'));
+ const metadata=JSON.parse(await readFile(new URL('skill-release.json',root),'utf8'));
+ const {version}=JSON.parse(await readFile(new URL('../package.json',root),'utf8'));
+ const config={...metadata,version};
  if(config.name!=='agentpay-skill-template'||!/^\d+\.\d+\.\d+$/.test(config.version)||!Array.isArray(config.requiredClientCapabilities)||config.requiredClientCapabilities.some(v=>typeof v!=='string'))throw Error('Invalid template release metadata.');
  const files=[];
  async function collect(url,prefix=''){

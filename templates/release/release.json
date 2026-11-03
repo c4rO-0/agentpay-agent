@@ -1,0 +1,12 @@
+{
+  "name": "agentpay-skill-template",
+  "requiredClientCapabilities": [
+    "input-snapshots-v1",
+    "output-files-v1",
+    "original-request-v1"
+  ],
+  "version": "0.1.1",
+  "filename": "agentpay-skill-template-0.1.1.zip",
+  "byteLength": 8634,
+  "sha256": "67f9786f6fc8d8d49873275f55a72afc5f4694c18bcd7ab67239cf0e78fdf96c"
+}
