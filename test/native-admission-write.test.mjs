@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,writeFile,rm} from 'node:fs/promises';
+import {join} from 'node:path';
+import {tmpdir} from 'node:os';
+import mysql from 'mysql2/promise';
+import {hashPrivateRequest} from '@agentpay/types';
+import {createNativeProviderRuntime} from '../src/native-provider-runtime.mjs';
+import {randomNativeApplication} from '../src/services/random-native.mjs';
+test('invalid Service Authorization cannot write an execution binding or run business code',async t=>{
+ const dir=await mkdtemp(join(tmpdir(),'provider-admission-write-'));t.after(()=>rm(dir,{recursive:true,force:true}));const credential=join(dir,'credential');await writeFile(credential,'fixture-credential',{mode:0o600});
+ const env={AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted',AGENT_PROVIDER_CREDENTIAL_FILE:credential,AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),AGENT_NATIVE_SKILL_ID:'0x'+'3'.repeat(64),AGENT_NATIVE_PROFILE_HASH:'0x'+'4'.repeat(64),AGENT_NATIVE_SELLER:'0x'+'1'.repeat(40),AGENT_NATIVE_OFFER_ID:'0x'+'5'.repeat(64),AGENT_NATIVE_QUOTE_TTL_SECONDS:'600'};
+ const before={...process.env};Object.assign(process.env,env);delete process.env.AGENT_NATIVE_VALID_UNTIL;t.after(()=>{for(const key of [...Object.keys(env),'AGENT_NATIVE_VALID_UNTIL'])before[key]===undefined?delete process.env[key]:process.env[key]=before[key];});
+ const statements=[];let released=0,executions=0;
+ const connection={query:async sql=>{statements.push(sql);return [[{acquired:1}],[]];},release(){released++;},destroy(){released++;}};
+ t.mock.method(mysql,'createPool',()=>({query:async()=>[[],[]],getConnection:async()=>connection,end:async()=>{}}));
+ t.mock.method(globalThis,'fetch',async()=>new Response(JSON.stringify({ok:false,error:{code:'UNAUTHORIZED',message:'invalid authorization'}}),{status:401,headers:{'content-type':'application/json'}}));
+ const runtime=await createNativeProviderRuntime({serviceId:'random',settlementBaseUrl:'https://settlement.example',publicBaseUrl:'https://provider.example',application:{...randomNativeApplication,execute:async()=>{executions++;throw Error('must not execute');}}});t.after(()=>runtime.close());
+ let status;const request={min:1,max:2};await runtime.handle({method:'POST',headers:{authorization:'AgentPay fabricated'}},{},new URL('https://provider.example/services/random/agentpay/invoke'),{readJson:async()=>({version:'agentpay.service-invocation.v1',orderId:'0x'+'6'.repeat(64),requestHash:hashPrivateRequest(request),request}),json(_res,code){status=code;}});
+ assert.equal(status,401);assert.equal(executions,0);assert.equal(statements.some(sql=>/INSERT|UPDATE/i.test(sql)),false);assert.equal(released,1);
+});

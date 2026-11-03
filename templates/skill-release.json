@@ -1,0 +1,5 @@
+{
+  "name": "agentpay-skill-template",
+  "version": "0.1.0",
+  "requiredClientCapabilities": ["input-snapshots-v1", "output-files-v1", "original-request-v1"]
+}

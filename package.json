@@ -1,0 +1,18 @@
+{
+  "name": "@agentpay/agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@agentpay/types": "file:vendor/protocol/agentpay-types-0.14.1.tgz",
+    "mysql2": "^3.15.3",
+    "viem": "^2.48.8"
+  },
+  "scripts": {
+    "start": "node src/index.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "simulate:agentpay-provider": "node scripts/agentpay-provider-simulator.mjs",
+    "build:skill-template": "node scripts/build-skill-template.mjs"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "mode": "production",
+  "marketUrl": "https://market.example",
+  "settlementUrl": "https://settlement.example",
+  "network": "eip155:8453",
+  "assetAddress": "0x1111111111111111111111111111111111111111",
+  "tokenDecimals": 6,
+  "tokenSymbol": "EXAMPLE",
+  "registrationUrl": "https://market.example/register",
+  "supportContact": "the operator of your AgentPay deployment"
+}

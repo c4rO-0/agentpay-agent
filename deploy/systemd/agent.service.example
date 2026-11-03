@@ -1,0 +1,26 @@
+[Unit]
+Description=AgentPay Agent Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bsplu
+Group=wheel
+WorkingDirectory=/home/workspace/agentpay/agent
+
+# Runtime inputs
+Environment=NODE_ENV=production
+Environment=APP_DIR=/home/workspace/agentpay/agent
+Environment=PATH=/home/bsplu/.nvm/versions/node/v24.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+ExecStart=/home/bsplu/.nvm/versions/node/v24.14.0/bin/node /home/workspace/agentpay/agent/src/index.mjs
+
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

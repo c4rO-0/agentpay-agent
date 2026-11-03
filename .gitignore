@@ -1,0 +1,16 @@
+node_modules/
+.npm/
+npm-debug.log*
+.DS_Store
+config/*.yaml
+config/*.yml
+enabled/*.yaml
+enabled/*.yml
+!config/*.example.yaml
+!enabled/.gitkeep
+
+artifacts/
+
+# Local rehearsal evidence and Protocol dependency archives.
+/doc/records/
+/vendor/protocol/

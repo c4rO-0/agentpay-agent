@@ -1,0 +1,23 @@
+{
+  "packageName": "my-skill",
+  "packageVersion": "1.0.0",
+  "author": "Your name or organization",
+  "services": {
+    "main": {
+      "version": "agentpay.service-reference.v1",
+      "adapter": "agentpay.json.v1",
+      "skillId": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "profileHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "profile": {
+        "version": "agentpay.service-profile.v1",
+        "providerId": "provider:replace-from-provider",
+        "serviceId": "echo",
+        "mcpEndpoint": "https://provider.example/services/echo/mcp/invoke",
+        "paymentEndpoint": "https://provider.example/services/echo/agentpay/invoke",
+        "seller": "0x0000000000000000000000000000000000000000",
+        "network": "eip155:31337",
+        "asset": "0x0000000000000000000000000000000000000000"
+      }
+    }
+  }
+}
