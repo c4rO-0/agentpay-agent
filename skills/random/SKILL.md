@@ -67,3 +67,15 @@ those exact conditions, pass `--accept-terms` JSON containing baseAmountAtomic,
 unitPriceAtomic and serviceWindowSeconds. A Quote rejection happens before Order
 creation: reevaluate the current offer and continue the same request. Transport
 errors do not permit changing accepted conditions or replacing a purchase.
+
+## Saved input and result
+
+This version requires the User shared client capabilities `input-snapshots-v1`,
+`output-files-v1` and `original-request-v1`. If asked to update User, do that before
+retrying; do not bypass the capability check. The Skill package is not the Runtime.
+
+User saves the validated JSON input before invocation and persists verified JSON
+results. Random has no input or output files; its file hooks intentionally return
+empty lists. Repeat the same command without `--force` to recover the original
+request or reuse its saved result. Cache and Order history are managed by User,
+not files beside this installed Skill. Do not remove history to force a retry.

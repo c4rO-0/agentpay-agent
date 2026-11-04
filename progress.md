@@ -1,5 +1,12 @@
 # AgentPay Provider Server Progress
 
+## Official random Skill cache adapter — 2026-11-03
+
+Verification: wrapper and template tests passed (2); controlled multi-service Runtime regressions passed (26), including installation of the new random ZIP and repeated-call result reuse with one simulated Order. User ZIP validation confirms three expected files and unchanged service references. The User test's stale hardcoded 1.1.0 assertion now reads the exported package version. These are controlled fixtures, not live paid acceptance.
+
+Random Skill candidate 1.2.0 now declares JSON-only input/output hooks and requires current User shared-client capabilities before invocation. Existing positional CLI, service identity and Provider business remain unchanged. Invalid ranges have a specific pre-invocation error. ZIP generation is deterministic. Controlled wrapper/client checks are separate from pending Market publication and paid participant acceptance.
+
+
 ## Remote Agent template tags — 2026-11-03
 
 Supersedes independent template release planning below. Agent template version now

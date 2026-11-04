@@ -1,5 +1,8 @@
 # AgentPay Provider Server TODO
 
+- [x] Update official random Skill to candidate 1.2.0 with shared-client cache hooks and capability checks; preserve its CLI and service identity.
+- [ ] Publish/review candidate random ZIP after matching User rollout; verify same-request result reuse and recovery without replacement payment. JSON-only service acceptance does not prove arbitrary-file transfers.
+
 - [x] Exclude local rehearsal records and Protocol archives from Git tracking while preserving all local files.
 - [ ] Arrange public Protocol dependency distribution before fresh-clone installation; disclosure review is deferred, local tarballs and current dependency references remain.
 - [ ] Before public release, sanitize repository history and review documentation links to excluded local evidence. Ignoring files does not remove historical content.

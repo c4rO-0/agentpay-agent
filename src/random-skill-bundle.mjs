@@ -3,7 +3,7 @@ import { writeSkillZip } from './skill-zip.mjs';
 import { createHash } from 'node:crypto';
 import {serviceReference} from './service-reference.mjs';
 
-export const RANDOM_SKILL_BUNDLE_VERSION='1.1.0';
+export const RANDOM_SKILL_BUNDLE_VERSION='1.2.0';
 
 // Deterministic ZIP: three regular files, no links or install hooks.
 export function packSkillFiles(files) { return writeSkillZip(Object.entries(files)); }
