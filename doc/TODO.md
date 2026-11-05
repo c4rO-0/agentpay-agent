@@ -1,5 +1,8 @@
 # AgentPay Provider Server TODO
 
+- [x] Align role-specific public network/token validation and remove implicit test-network selection in the approved loop-1 scope; see progress.
+- [ ] Participant/deployment acceptance remains pending; config validation is not full real-network workflow acceptance.
+
 - [x] Update official random Skill to candidate 1.2.0 with shared-client cache hooks and capability checks; preserve its CLI and service identity.
 - [ ] Publish/review candidate random ZIP after matching User rollout; verify same-request result reuse and recovery without replacement payment. JSON-only service acceptance does not prove arbitrary-file transfers.
 

@@ -1,5 +1,18 @@
 # Agent Development Instructions
 
+
+## Network portability invariant — 2026-11-04
+
+Develop and verify the same product flows on Anvil. Moving to a supported EVM
+network must use configuration, deployment artifacts and explicit signer selection,
+not a separate implementation of authorization, payment or recovery. External-owner
+signing must be testable against Anvil as well. Keep test signer guards and private
+reset/funding tools restricted; never remove them to make a product entry portable.
+Chain ID is identity, not permission to select an unlocked test signer. Network
+capabilities/finality and deployment addresses are explicit validated settings.
+Changing networks never silently rewrites saved Policies, Orders or request identity.
+Anvil results do not establish real-network compatibility or release approval.
+
 ## Public repository boundary
 
 This repository is public (confirmed by the owner on 2026-11-03). Treat every

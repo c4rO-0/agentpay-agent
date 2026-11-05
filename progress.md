@@ -1,5 +1,14 @@
 # AgentPay Provider Server Progress
 
+## Network portability loop 1 — 2026-11-04
+
+Provider network must be explicit; the reference runtime and service-reference
+response no longer substitute eip155:31337 when absent. Deployment validation rejects
+out-of-range numeric networks and zero assets. 13 focused tests passed, plus
+Market-to-Provider handoff on four configured chain IDs. No service changes or
+publication; no private artifacts added.
+
+
 ## Official random Skill cache adapter — 2026-11-03
 
 Verification: wrapper and template tests passed (2); controlled multi-service Runtime regressions passed (26), including installation of the new random ZIP and repeated-call result reuse with one simulated Order. User ZIP validation confirms three expected files and unchanged service references. The User test's stale hardcoded 1.1.0 assertion now reads the exported package version. These are controlled fixtures, not live paid acceptance.

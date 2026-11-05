@@ -178,7 +178,7 @@ function loadConfig({ serviceId, settlementBaseUrl, publicBaseUrl }) {
     dbHost: required("AGENT_PROVIDER_DB_HOST", "127.0.0.1"), dbPort: Number(process.env.AGENT_PROVIDER_DB_PORT || 3306),
     dbUser: required("AGENT_PROVIDER_DB_USER"), dbPassword: String(process.env.AGENT_PROVIDER_DB_PASSWORD || ""),
     dbName: required("AGENT_PROVIDER_DB_NAME", "agentpay_agent"),
-    network: required("AGENT_NATIVE_NETWORK", "eip155:31337"), asset: required("AGENT_NATIVE_ASSET"),
+    network: required("AGENT_NATIVE_NETWORK"), asset: required("AGENT_NATIVE_ASSET"),
     skillId: bytes32(required("AGENT_NATIVE_SKILL_ID"), "AGENT_NATIVE_SKILL_ID"),
     profileHash: bytes32(required("AGENT_NATIVE_PROFILE_HASH"), "AGENT_NATIVE_PROFILE_HASH"),
     seller: required("AGENT_NATIVE_SELLER"), baseAmount: uint(required("AGENT_NATIVE_BASE_AMOUNT", "0"), "baseAmount"),

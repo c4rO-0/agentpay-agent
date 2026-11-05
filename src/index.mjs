@@ -330,7 +330,7 @@ const server = createServer(async (req, res) => {
       if (!binding) return json(res, 409, { ok: false, error: { code: "PROVIDER_NOT_BOUND" } });
       const profile={version:'agentpay.service-profile.v1',providerId:binding.providerId,serviceId,
         mcpEndpoint:serviceUrls.mcpEndpoint,paymentEndpoint:serviceUrls.paymentEndpoint,
-        seller:process.env.AGENT_NATIVE_SELLER,network:process.env.AGENT_NATIVE_NETWORK||'eip155:31337',asset:process.env.AGENT_NATIVE_ASSET};
+        seller:process.env.AGENT_NATIVE_SELLER,network:process.env.AGENT_NATIVE_NETWORK,asset:process.env.AGENT_NATIVE_ASSET};
       const reference=serviceReference({skillId:process.env.AGENT_NATIVE_SKILL_ID,profileHash:process.env.AGENT_NATIVE_PROFILE_HASH,profile});
       if(url.pathname.endsWith('/service-reference'))return json(res,200,reference);
       if (url.pathname.endsWith('/skill-bundle.zip')) {

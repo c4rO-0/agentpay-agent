@@ -8,7 +8,7 @@ export function validateProviderDeployment(input) {
   if (!input || input.version !== 1 || !['private-anvil', 'production'].includes(input.mode) || Object.keys(input).some(key => !keys.includes(key)))
     throw new Error('Invalid public Provider deployment config; use the file supplied by AgentPay');
   const result = { ...input, marketUrl: serviceBase(input.marketUrl, 'Market URL'), settlementUrl: serviceBase(input.settlementUrl, 'Settlement URL') };
-  if (!/^eip155:[1-9][0-9]*$/.test(input.network) || !isAddress(input.assetAddress) ||
+  if (!/^eip155:[1-9][0-9]*$/.test(input.network) || !isAddress(input.assetAddress) || /^0x0{40}$/i.test(input.assetAddress) || !Number.isSafeInteger(Number(input.network?.split(':')[1])) ||
       !Number.isInteger(input.tokenDecimals) || input.tokenDecimals < 0 || input.tokenDecimals > 36 ||
       !/^[A-Za-z0-9_-]{1,20}$/.test(input.tokenSymbol || '')) throw new Error('Invalid network/token metadata in public deployment config');
   if (input.registrationUrl) {
