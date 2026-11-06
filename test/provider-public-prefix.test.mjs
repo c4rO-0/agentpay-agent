@@ -44,7 +44,7 @@ test('endpoint proof matches the public prefix but is served on the rewritten lo
  }finally{await rm(dir,{recursive:true,force:true});}
 });
 test('native pre-admission uses public quote/health paths while local handlers retain no-prefix routes',async t=>{
- const env={AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'pre_admission',AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),AGENT_NATIVE_SKILL_ID:b32('3'),AGENT_NATIVE_PROFILE_HASH:b32('4'),AGENT_NATIVE_SELLER:'0x'+'1'.repeat(40),AGENT_NATIVE_OFFER_ID:b32('5'),AGENT_NATIVE_QUOTE_TTL_SECONDS:'600'};
+ const env={AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'pre_admission',AGENT_NATIVE_NETWORK:'eip155:31337',AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),AGENT_NATIVE_SKILL_ID:b32('3'),AGENT_NATIVE_PROFILE_HASH:b32('4'),AGENT_NATIVE_SELLER:'0x'+'1'.repeat(40),AGENT_NATIVE_OFFER_ID:b32('5'),AGENT_NATIVE_QUOTE_TTL_SECONDS:'600'};
  const prior={...process.env};Object.assign(process.env,env);delete process.env.AGENT_NATIVE_VALID_UNTIL;
  t.after(()=>{for(const key of Object.keys(env))prior[key]===undefined?delete process.env[key]:process.env[key]=prior[key];if(prior.AGENT_NATIVE_VALID_UNTIL!==undefined)process.env.AGENT_NATIVE_VALID_UNTIL=prior.AGENT_NATIVE_VALID_UNTIL;});
  const statements=[];t.mock.method(mysql,'createPool',()=>({query:async sql=>{statements.push(sql);return [[],[]];},end:async()=>{}}));

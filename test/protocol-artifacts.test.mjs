@@ -8,7 +8,10 @@ import { AGENTPAY_PRIVATE_REQUEST_VERSION, canonicalizePrivateRequest, hashPriva
 test("Agent consumes the pinned native private-request conformance artifact", () => {
   const manifest = JSON.parse(readFileSync(new URL("../vendor/protocol/artifact-manifest.json", import.meta.url)));
   const artifact = manifest.packages.find((entry) => entry.name === "@agentpay/types");
-  assert.equal(artifact.version, "0.11.1");
+  const installed = JSON.parse(readFileSync(new URL("../node_modules/@agentpay/types/package.json", import.meta.url)));
+  const consumer = JSON.parse(readFileSync(new URL("../package.json", import.meta.url)));
+  assert.equal(artifact.version, installed.version);
+  assert.equal(consumer.dependencies["@agentpay/types"], `file:vendor/protocol/${artifact.file}`);
   const bytes = readFileSync(new URL(`../vendor/protocol/${artifact.file}`, import.meta.url));
   assert.equal(createHash("sha256").update(bytes).digest("hex"), artifact.sha256);
   const records = JSON.parse(readFileSync(new URL("../node_modules/@agentpay/types/fixtures/agentpay-native-service-v1/records.json", import.meta.url)));

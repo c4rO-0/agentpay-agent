@@ -1,6 +1,6 @@
 # AgentPay Provider Server
 
-[Official Skill template ownership and releases](doc/runbooks/skill-template-release.md).
+A reference paid random-number Provider and editable Skill template for service developers.
 
 For service operators and Skill publishers. This reference Provider offers paid services, keeps its own credentials and execution state, and submits only required payment evidence to Settlement.
 
@@ -14,7 +14,9 @@ There are two independent flows:
    This handles account binding, endpoint verification and service registration,
    without managing the service's database or process.
 
-Use Node 22.22.3 or a later compatible version. From this repository:
+Use Linux with Node 22.22.3 or a later compatible version and npm. The reference
+application also needs its own MySQL database/login; see [database preparation](doc/runbooks/provider-database.md).
+From this repository:
 
 ```bash
 npm ci
@@ -40,7 +42,7 @@ source tests do not establish public release readiness.
 | Developers / integrators | [Development](doc/develope.md), [architecture](doc/architecture.md), [design](doc/design.md) |
 | Maintainers | [Current progress](progress.md), [actionable TODO](doc/TODO.md) |
 | AI coding assistants | [AGENTS.md](AGENTS.md), then current progress and target documents |
-| Reviewers | [Evidence index](doc/records/README.md), [ZIP format verification](doc/records/skill-zip-format-2026-10-10.md); records state their own scope and date |
+| Reviewers / contributors | [Contributing](CONTRIBUTING.md), [security reporting](SECURITY.md), [development and test scope](doc/develope.md) |
 
 [All documentation by purpose](doc/README.md).
 
@@ -50,13 +52,12 @@ Provider B1/B2, rolling quotes, qualification and local admission have private e
 
 Current work is tracked in progress and TODO. Dated evidence and archived instructions do not authorize deployment, migration, reset or a new purchase.
 
-Planning history: [2026-10-23 progress snapshot](doc/archive/before-planning-review-2026-10-23-progress.md)
-· [retained task snapshot](doc/archive/before-planning-review-2026-10-23-todo.md).
-Use current progress/TODO for scheduling; historical tasks are not silently cancelled.
+The required public Protocol archive is included with its license and
+[provenance](vendor/protocol/README.md). Private experiment records and old archives
+are not distributed. Public package-channel and compatibility design remain open.
 
-Documentation maintenance: [current role/function catalog](doc/README.md).
-The 2026-10-27 consolidation preserves prior progress/TODO/catalog snapshots in
-`doc/archive/`; use current progress for scheduling, not historical pending labels.
+[Official Skill template releases](doc/runbooks/skill-template-release.md) use Agent
+version tags; normal Provider installation does not require the User repository.
 
 ## License
 

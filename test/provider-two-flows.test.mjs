@@ -42,7 +42,8 @@ test('two independent coordinators complete credential loading, B1 profile refre
  const account=await createProviderOnboarding(connectionPath,{fetchImpl});
  const output=[];
  const appUi={heading(s){output.push(s);},write(s){output.push(s);},async ask(){assert.ok(appAnswers.length);return appAnswers.shift();}};
- let appAnswers=['','0.6','0.1'];
+ // Keep the platform's default delivery window after choosing prices.
+ let appAnswers=['','0.6','0.1',''];
  async function loadApplication(){await application.configure(connectionPath,appUi);applicationRuns++;}
  let prompts=0;
  const ui={heading(s){output.push(s);},write(s){output.push(s);},async ask(prompt){

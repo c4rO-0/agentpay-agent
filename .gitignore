@@ -13,4 +13,26 @@ artifacts/
 
 # Local rehearsal evidence and Protocol dependency archives.
 /doc/records/
-/vendor/protocol/
+/vendor/protocol/*
+!/vendor/protocol/agentpay-types-0.14.1.tgz
+!/vendor/protocol/LICENSE
+!/vendor/protocol/README.md
+!/vendor/protocol/artifact-manifest.json
+
+# Private local configuration, state and credentials.
+.env
+.env.*
+*.env
+!*.example.env
+!.env.example
+*.log
+.tmp/
+data/
+*.token
+*.keystore.json
+*.sock
+*.pem
+*.key
+*.p12
+*.pfx
+*.swp

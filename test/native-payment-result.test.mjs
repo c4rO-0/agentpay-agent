@@ -10,7 +10,7 @@ test('payment forwarding distinguishes pending from terminal results without exe
  const dir=await mkdtemp(join(tmpdir(),'provider-payment-'));t.after(()=>rm(dir,{recursive:true,force:true}));
  const credential=join(dir,'credential');await writeFile(credential,'fixture-only',{mode:0o600});
  const env={AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted',AGENT_PROVIDER_CREDENTIAL_FILE:credential,
-  AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),
+  AGENT_NATIVE_NETWORK:'eip155:31337',AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),
   AGENT_NATIVE_SKILL_ID:'0x'+'3'.repeat(64),AGENT_NATIVE_PROFILE_HASH:'0x'+'4'.repeat(64),AGENT_NATIVE_SELLER:'0x'+'1'.repeat(40),
   AGENT_NATIVE_OFFER_ID:'0x'+'5'.repeat(64),AGENT_NATIVE_QUOTE_TTL_SECONDS:'600'};
  const before={...process.env};Object.assign(process.env,env);delete process.env.AGENT_NATIVE_VALID_UNTIL;

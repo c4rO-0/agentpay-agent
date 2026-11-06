@@ -22,7 +22,7 @@ independent version. An author's new Skill `packageVersion` is separate.
 4. Tag that reviewed commit with the Agent version and push the commit and tag.
    GitHub Releases/attachments are not required. The build script never publishes.
 
-Initial remote-tag candidate: Agent `v0.1.1`. The earlier independent 0.1.0 candidate
+Published template tag: Agent `v0.1.1` (anonymous tag reference verified). The earlier independent 0.1.0 candidate
 is superseded. Generated filenames and manifest version follow Agent automatically;
 the builder refuses to overwrite an existing same-version ZIP with different bytes.
 Market checks remote tags only; it never reads a sibling checkout or executes source

@@ -1,5 +1,18 @@
 # Agent Developer Guide
 
+From an independent checkout with compatible Node installed:
+
+```sh
+npm ci
+npm test
+```
+
+The reviewed public Protocol dependency is included with its provenance and MIT
+license. No sibling repository or platform database is needed for the local suite. See
+[the test guide](../test/README.md) for focused commands and evidence limits.
+Tests use controlled services and temporary state; the reference application itself
+requires MySQL for installation/execution. See [database preparation](runbooks/provider-database.md).
+
 Start with [architecture](./architecture.md), [design](./design.md), and
 [TODO](./TODO.md). Native payment orchestration lives in
 src/native-provider-runtime.mjs; its application interface accepts validate,
@@ -31,8 +44,8 @@ node --test --experimental-test-isolation=none test/local-random-server.test.mjs
 
 The coordinator tests use the existing API clients with injected HTTP responses and
 owner-held temporary files. Process tests start/stop only their own temporary child.
-They do not operate the current platform or prove Anvil/DB/human acceptance. See the
-[two-flow implementation verification](records/provider-two-flows-complete-2026-10-09.md).
+They do not operate the platform or prove Anvil/DB/human acceptance. Private
+operational records are not prerequisites for these controlled tests.
 
 ## Replacing the reference business
 

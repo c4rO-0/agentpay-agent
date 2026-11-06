@@ -13,12 +13,12 @@ provider-service-state.mjs stores one service identity in an owner-held file, wi
 
 The Provider runtime hosts service implementations under `src/services/` and
 exposes health, price discovery, invocation, and execution HTTP boundaries. It
-owns supplier-side private execution and receipt submission. The installed
-user-side Skill lives in sibling `user`. Settlement owns commercial
+owns supplier-side private execution and receipt submission. The user-side Skill calls the separate AgentPay User Runtime on the buyer's machine.
+A Provider installation does not require a sibling User checkout. Settlement owns commercial
 facts and order authorization; Wallet owns the user Session Key; Protocol owns
 canonical payment structures.
 
-The native target flow is User Runtime -> local Skill -> Provider server, with the
+The native invocation flow is Agent/harness -> local Skill -> User Runtime -> Provider server, with the
 provider server checking Settlement online before serving. The Agent must not
 become a generic signer, wallet, payment router, or quality judge.
 
@@ -50,19 +50,22 @@ files; `scripts/provider-bind.mjs` exposes explicit status, issue, resume,
 reissue, recovery and rotation actions. Missing onboarding state does not fall
 back to an environment-supplied Provider ID. Credentials remain separate;
 online paid-request authorization continues to be enforced by Settlement.
-The canonical private deployment loads `/etc/agentpay/provider.env`, stores
-the verified binding under `/var/lib/agentpay/provider`, and stages its
-control Credential at `/run/agentpay/provider/control-credential.token`.
-After commercial admission, a separate `provider.token` copy is staged in
-the same runtime directory for paid operations.
+Configuration, credential and state paths are application-owned. The local guide
+uses an owner-held data directory; system deployments can choose different paths.
+The connection guide reports the actual files and never reads platform configuration.
 
-## 完整随机数包组件
+## Random Skill and generic template
 
-Provider 的 `src/random-skill-bundle.mjs` 将 `skills/random/` 的说明和脚本
-与真实绑定产生的 manifest 生成确定性受限 ZIP（随机数压缩包版本 1.0.1，service 声明版本仍为 1.0.0）；原 JSON 路由保持兼容。
-User 的 `src/skill-bundle.mjs` 校验并保存完整包，`scripts/install-skill-bundle.mjs`
-提供不依赖 Market 的交互入口。安装不执行代码或切换当前 Runtime；包内脚本
-核对 Runtime 服务引用后调用原有认证接口。
+`src/random-skill-bundle.mjs` packages `skills/random/` and a manifest based on the
+verified service binding into a deterministic ZIP. The package version is defined
+by `RANDOM_SKILL_BUNDLE_VERSION` (currently 1.2.0), separately from service identity.
+Its script uses the shared User client, with JSON-specific business hooks. User
+owns transport, input/result persistence and recovery; Agent owns the example's
+input validation and output behavior. Installing a package alone makes no payment.
+
+`templates/skill/` is the editable business-neutral template. Its distributed ZIP
+follows Agent's package version and tags, not the random Skill's package version.
+See [template release procedure](runbooks/skill-template-release.md).
 
 ## 托管 Provider 身份准备与启动入口
 

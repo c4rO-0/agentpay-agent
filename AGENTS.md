@@ -1,5 +1,33 @@
 # Agent Development Instructions
 
+## Behavior-first verification — 2026-11-06
+
+- Prefer end-to-end tests through real product entry points and public interfaces.
+  Test observable behavior and user outcomes, not internal implementation shape.
+  Use real processes, storage and Anvil where the claim depends on them; do not
+  substitute direct database writes or internal-state injection for the workflow
+  being accepted. Controlled fixtures may prepare prerequisites.
+- Select meaningful complete journeys and failure boundaries: independent install/
+  package consumption, authorization, payment, delivery, settlement/refund, denied
+  access, duplicate requests and interrupted-operation recovery as applicable.
+  A test should demonstrate a functional requirement or a concrete regression.
+- Avoid tests that merely mirror implementation, assert source text/private helper
+  structure, or repeat the same coverage without a distinct failure boundary.
+  Syntax, type and build checks are useful checks, not functional acceptance.
+- Keep focused tests for signatures, canonical hashes, amount/time boundaries,
+  authorization and concurrency invariants when they give precise protection that
+  end-to-end tests alone cannot efficiently provide. End-to-end preference does
+  not remove negative security or financial-boundary coverage.
+- Review existing tests by the same standard. Consolidate redundant tests only
+  after equivalent meaningful coverage passes; do not delete a regression merely
+  because it is a unit test. Do not inflate test counts as a measure of readiness.
+- Label mocked external dependencies and evidence limits explicitly. Simulated
+  success does not prove real process recovery, real payment or participant usability.
+  Keep tests bounded to the change and use maintained fixtures; this principle does
+  not authorize live funds, public-network operations, destructive resets or broad
+  resource-heavy test runs.
+
+
 
 ## Network portability invariant — 2026-11-04
 
@@ -24,10 +52,11 @@ commit, push, tag and release artifact as public disclosure.
 - Examples and tests must use clearly synthetic credentials and identities.
   Do not copy real account emails, private host paths, deployment inventories or
   participant records into public documentation or fixtures.
-- `doc/records/` and `vendor/protocol/` are intentionally ignored and local-only.
-  Preserve local files; never force-add them or remove their ignore rules without
-  explicit owner authorization and a disclosure review. Protocol publication and
-  dependency distribution are separate decisions.
+- `doc/records/` and historical Protocol archives remain private and ignored.
+  Only the reviewed public Protocol archive, license, README and provenance manifest
+  explicitly allowlisted in `.gitignore` may be distributed. Verify source and digest
+  before replacing them; never force-add older local artifacts. Preserve private
+  evidence outside the public tree. Package-channel design remains separate work.
 - Before committing, inspect staged diffs and newly added files for sensitive
   content. Before pushing or publishing, inspect all outgoing commits and the
   actual archive contents, including generated files and nested dependencies.

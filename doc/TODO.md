@@ -1,31 +1,14 @@
-# AgentPay Provider Server TODO
+# Provider TODO
 
-- [x] Align role-specific public network/token validation and remove implicit test-network selection in the approved loop-1 scope; see progress.
-- [ ] Participant/deployment acceptance remains pending; config validation is not full real-network workflow acceptance.
+## Public source and distribution
 
-- [x] Update official random Skill to candidate 1.2.0 with shared-client cache hooks and capability checks; preserve its CLI and service identity.
-- [ ] Publish/review candidate random ZIP after matching User rollout; verify same-request result reuse and recovery without replacement payment. JSON-only service acceptance does not prove arbitrary-file transfers.
-
-- [x] Exclude local rehearsal records and Protocol archives from Git tracking while preserving all local files.
-- [ ] Arrange public Protocol dependency distribution before fresh-clone installation; disclosure review is deferred, local tarballs and current dependency references remain.
-- [ ] Before public release, sanitize repository history and review documentation links to excluded local evidence. Ignoring files does not remove historical content.
-- [x] Align template version with Agent/Provider tags and implement Market remote-tag refresh; no local sibling fallback or GitHub Release requirement. Deployment acceptance remains separate.
-
-- [x] Move official editable Skill template and independent version/release packaging into Agent; Market distributes a digest-checked pinned artifact only.
-- [ ] Publish/verify Agent v0.1.1 tag with committed ZIP + manifest; configure Market remote repository and deploy with matching User capabilities. No separate template version or GitHub Release is required.
-- [ ] Investigate retained publication schema-test failure: WALLET_MAPPING_SCHEMA_INVALID in the pre-existing fresh-schema fixture. Template artifact/interop checks pass; full suite is not green.
-
-- [x] Align Provider HTTP/HTTPS support with types 0.14.1; keep platform credential and local-control protection, original profile hashes and historical identity. Controlled source verification recorded in progress.
-- [ ] Coordinate deployment of matching transport validators/artifacts; verify actual Provider onboarding without changing old identities.
-
-- [x] Implement new-Order-only restriction enforcement and atomic audit, safe Market
-  status and participant guidance; targeted source/HTTP/type checks passed.
-- [ ] Run prepared isolated SQL lock/rollback tests and live read-only inventory.
-- [ ] After successful inventory, retire only the empty redundant restriction table,
-  deploy the matching services and perform scoped Provider block/unblock acceptance.
-
-Updated 2026-10-27. Tasks below separate remaining acceptance from completed source
-work. See [current progress](../progress.md) for evidence and scope.
+- [x] Publish reviewed source history and Agent v0.1.1 template tag; anonymous refs verified.
+- [x] Include one reviewed public Protocol dependency with provenance/license; exclude old artifacts.
+- [x] Repair public documentation links and separate platform tasks from Provider work.
+- [x] Add contribution/security entries and private-file ignore rules.
+- [x] Independent public-file snapshot: offline dependency installation and all 100 local tests passed; no live database/chain acceptance implied.
+- [ ] Agree public Protocol distribution and supported compatibility requirements.
+- [ ] Establish public CI for independent Provider tests and template integrity.
 
 ## Next closed loops
 
@@ -49,7 +32,7 @@ work. See [current progress](../progress.md) for evidence and scope.
 - [ ] Verify selected withdrawal/order drain and credential/binding cleanup with
   Settlement; accepted work retains its obligations, unaccepted closure follows deadlines.
 - [ ] Coordinate current User release and reviewed onboarding digest; verify official
-  wrapper/harness installation and scoped paid recovery. Already-published 1.1.0 need not be republished.
+  wrapper/harness installation and scoped paid recovery. Do not rewrite immutable published package versions.
 - [ ] Review retained packaged request-ID minimum validation before enabling affected packages.
 
 ## Stage 2/3 and release work
@@ -60,10 +43,10 @@ work. See [current progress](../progress.md) for evidence and scope.
 - [ ] Verify external Providers follow public guidance without platform SQL/files;
   operational load, credential security and application-specific recovery remain explicit.
 
-## Retained history
+## Scope of retained work
 
-[Prior TODO](archive/before-doc-consolidation-2026-10-27-todo.md) preserves every
-original task and link. Duplicate deployment/connection tasks are consolidated
-above; full-Safe owner website proof is superseded by Wallet-only access. Completed
-source tests do not close actual participant or financial acceptance. Other old
-unchecked limits remain retained and must be reconciled before scheduling related work.
+[Backlog scope](reference/documentation-backlog.md) summarizes preserved acceptance.
+Private historical snapshots remain outside this public repository. Platform-only
+SQL retirement and Market schema-test tasks remain with their owning projects;
+removing them here neither resolves nor cancels them. Publication and source tests
+do not establish public-network, human-onboarding or financial acceptance.

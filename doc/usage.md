@@ -23,9 +23,9 @@ runtime configuration is illustrated by `config/provider.example.env`.
 these are implementation tools, not universal onboarding requirements. Database
 preparation is described in [the reference database runbook](runbooks/provider-database.md).
 
-On the existing private host, runtime configuration is `/etc/agentpay/provider.env`
-and persistent state is under `/var/lib/agentpay/provider`. These are operator
-choices. The connection wizard does not read these files or the platform environment.
+Use the paths saved by your installation or chosen by your service administrator.
+The connection wizard reads its own connection files, not platform configuration.
+System-service paths are deployment choices, not Provider interface requirements.
 
 The application-owned `provider-install.mjs INSTALL_CONFIG configure CONNECTION_CONFIG`
 command now loads credentials, prepares the canonical declaration and checks local

@@ -1,35 +1,21 @@
-# AgentPay agent documentation
+# Provider documentation
 
-[Official Skill template ownership and releases](runbooks/skill-template-release.md).
-
-Current state: [Progress](../progress.md) · [TODO](TODO.md).
-These describe current evidence and sequencing; dated records are historical evidence.
-
-## Start by purpose
-
-| Reader / purpose | Entry |
+| Reader | Start here |
 | --- | --- |
-| Human introduction | [Repository README](../README.md) |
-| Installation and operation | [Usage](usage.md) |
-| Developers | [Development](develope.md), [architecture](architecture.md), [design](design.md) |
-| AI assistants | [AGENTS](../AGENTS.md), then progress and TODO |
-| Maintainers and reviewers | [Evidence index](records/README.md), current plans below |
+| Service operator | [Installation](runbooks/provider-installation.md), [connection](runbooks/provider-onboarding.md), [usage](usage.md) |
+| Developer | [Developer guide](develope.md), [architecture](architecture.md), [design](design.md), [contributing](../CONTRIBUTING.md) |
+| Skill author | [Publishing](runbooks/skill-publishing.md), [template releases](runbooks/skill-template-release.md) |
+| Maintainer | [Progress](../progress.md), [TODO](TODO.md), [backlog scope](reference/documentation-backlog.md) |
+| Security reviewer | [Security reporting](../SECURITY.md), [public dependency provenance](../vendor/protocol/README.md) |
+| AI contributor | [AGENTS](../AGENTS.md) |
 
-## Operational guides
+## Operational references
 
-- [Prepare your Provider execution database](runbooks/provider-database.md)
-- [Install and operate the reference random-number service](runbooks/provider-installation.md)
-- [Connect an existing Provider service to AgentPay](runbooks/provider-onboarding.md)
-- [Rolling Quotes for the reference random Provider](runbooks/rolling-quotes.md)
-- [Skill 发布、预览和获取：当前范围](runbooks/skill-publishing.md)
+- [Execution database preparation](runbooks/provider-database.md)
+- [Rolling quotes](runbooks/rolling-quotes.md)
 
-## Reference
-
-- [Retained backlog disposition](reference/documentation-backlog.md)
-
-## History
-
-[Previous catalog](archive/before-doc-consolidation-2026-10-27-catalog.md) preserves
-older cross-links. [Previous progress](archive/before-doc-consolidation-2026-10-27-progress.md)
-and [previous TODO](archive/before-doc-consolidation-2026-10-27-todo.md) retain detailed
-history and unresolved limits. Archive entries are not current installation commands.
+Installation and AgentPay connection are separate flows. Providers use public and
+role-authorized platform APIs; they do not need platform source, files or SQL.
+Private experiment records and historical catalogs are retained outside this public
+repository. Current progress describes evidence limits, not instructions to repeat
+old deployments or resets.

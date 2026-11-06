@@ -37,7 +37,6 @@ across a window and same-window behavior after restart. Settlement must also
 successfully observe the Quote. Its freshness/admission checks still apply.
 An online endpoint alone is not sufficient to establish purchase readiness.
 
-The [private verification record](../records/provider-rolling-quote-2026-10-06.md)
-documents the completed existing-host run. External onboarding CLI rollout,
-Settlement timestamp correction and public/live-network qualification remain
+The private rolling-quote verification (not distributed)
+documents the completed existing-host run. Independent-host onboarding, outage recovery and public-network acceptance remain
 separate work. No routine per-order owner signature is introduced.
