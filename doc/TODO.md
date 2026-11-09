@@ -1,5 +1,23 @@
 # Provider TODO
 
+## Skill package delivery
+
+- [x] Cache generated ZIP bytes and SHA with bounded memory; coalesce concurrent builds and clear failed in-flight builds so later downloads can retry.
+- [x] Verify identical concurrent downloads, changed service references, restart after source/version updates, and build failure recovery; never serve a stale artifact for changed inputs.
+- [ ] After Market recovery verification, bump the reference package version and deploy the Provider download endpoint; publish the exact ZIP downloaded there through Market. Preserve existing published versions and the current User test pin until replacement acceptance.
+
+## Existing-host admission
+
+- [x] Official configure command and controlled CLI failure/success verification.
+- [x] Verify reference-host process-manager reload and live paid readiness through the official command.
+- [ ] Complete matching Skill and paid-path acceptance.
+
+## Service revalidation
+
+- [x] Record [the planned connection-tool integration](plans/provider-revalidation.md).
+- [ ] After Settlement API readiness, add explicit service-scoped revalidation and concise connection guidance; no automatic retry loop that bypasses expiry.
+- [ ] Verify authentication recovery, profile preservation, idempotency, restriction handling and retained original-Order access.
+
 ## Public source and distribution
 
 - [x] Publish reviewed source history and Agent v0.1.1 template tag; anonymous refs verified.

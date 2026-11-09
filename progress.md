@@ -1,5 +1,67 @@
 # AgentPay Provider progress
 
+## Package 1.2.1 endpoint verified — 2026-11-08
+
+Operator restart and controlled HTTP download checks passed. The running endpoint
+returned version 1.2.1; concurrent/repeated ZIP bytes and response digest matched
+the source-generated artifact. This verifies deployed download consistency, not
+production load capacity. Market publication and new-package paid acceptance are
+still pending; the User test pin has not changed.
+
+
+## Skill download caching implemented — 2026-11-08
+
+The reference package is now 1.2.1. Downloads reuse one process-local ZIP/SHA;
+concurrent requests share the build and different identities serialize compression.
+Changed registered service references replace the cached artifact. Source/version
+updates require a process restart. Failed builds are cleared for later retry;
+source content and compressed ZIP are each limited to 4 MiB. No disk package cache
+or unbounded identity map is introduced.
+
+Four focused regressions passed, covering 40 concurrent package requests, reuse,
+changed identity, failure recovery, restart determinism, shared User client behavior
+and generic-template reproducibility. These are controlled tests, not deployed HTTP
+load acceptance. The generic template version is unchanged.
+
+Deployment remains pending. Deploy Provider first, download its formal ZIP, then
+upload those same bytes to Market. Verify same-version/different-byte refusal before
+publishing the new package. Existing Market releases and User test pin stay intact
+until replacement review and acceptance finish.
+
+## Existing-host admission walkthrough — 2026-11-08
+
+Operator executed the official configure entry and reloaded the externally managed
+service. Post-restart status confirmed local admission and platform commercial
+readiness. No purchase was made; matching Skill and paid-path acceptance remain
+pending. This is one reference-host walkthrough, not independent-host acceptance.
+
+
+## Existing-host paid admission — 2026-11-08
+
+The official `provider-host.mjs CONFIG configure` command now verifies binding,
+credentials, live declaration, qualification and Quote before saving local admission.
+It does not register, change service identity/price/storage, restart or purchase.
+Eight targeted tests passed, including the actual CLI against controlled HTTP
+fixtures: denied readiness and wrong credentials preserve configuration; success
+changes only admission; repetition preserves identity. Live deployment remains pending.
+
+
+## Official login command — 2026-11-08
+
+The standalone login CLI prompts for a missing Market email when interactive and
+shows the selected account before hidden password input. Noninteractive callers
+still supply MARKET_EMAIL; valid saved sessions are reused. Ten focused tests
+passed, including executing the login CLI against a controlled local HTTP server.
+This is not live onboarding or human TTY acceptance.
+
+## Service revalidation plan — 2026-11-08
+
+[Plan](doc/plans/provider-revalidation.md): Settlement admission expires after
+30 continuous offline days and a final failed check; automatic probes then stop.
+Add an explicit revalidation step to the connection tool after the backend API is
+ready. Existing Orders, Registry qualification and other services are unchanged.
+Documentation only; no new command is implemented.
+
 ## Public-source follow-up — 2026-11-06
 
 Agent is public. The published main and v0.1.1 tag were anonymously readable during

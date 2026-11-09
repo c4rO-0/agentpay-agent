@@ -3,15 +3,23 @@
 import { createMarketSession } from '../src/provider-market-session.mjs';
 import { terminal } from '../src/provider-terminal.mjs';
 try {
-  const env = Object.fromEntries(['MARKET_BASE_URL', 'MARKET_EMAIL', 'MARKET_SESSION_TOKEN_FILE'].map(key => {
+  const env = Object.fromEntries(['MARKET_BASE_URL', 'MARKET_SESSION_TOKEN_FILE'].map(key => {
     if (!process.env[key]?.trim()) throw new Error(`${key} is required`);
     return [key, process.env[key].trim()];
   }));
+  const ui = process.stdin.isTTY ? terminal() : null;
+  env.MARKET_EMAIL = process.env.MARKET_EMAIL?.trim();
+  if (!env.MARKET_EMAIL && ui) {
+    env.MARKET_EMAIL = await ui.ask("Market account email ('q' to cancel)");
+    if (env.MARKET_EMAIL === 'q') throw new Error('Login cancelled; saved connection files are unchanged');
+  }
+  if (!env.MARKET_EMAIL) throw new Error('MARKET_EMAIL is required when running without an interactive terminal');
+  if (ui) { ui.heading('Sign in to Market'); ui.write(`Account: ${env.MARKET_EMAIL}`); }
   const client = createMarketSession({ env });
   let state = await client.inspect();
   if (state.state !== 'valid') {
     let password;
-    if (process.stdin.isTTY) password = await terminal().ask('Market password (hidden)', { secret: true });
+    if (process.stdin.isTTY) password = await ui.ask('Market password (hidden)', { secret: true });
     else {
       const chunks = []; let bytes = 0;
       for await (const chunk of process.stdin) {

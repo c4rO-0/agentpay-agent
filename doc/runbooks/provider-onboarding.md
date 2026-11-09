@@ -225,3 +225,16 @@ this control. Public Market status uses Suspended and excludes private operation
 reasons; after unblock, normal readiness must still pass. Unknown status requires
 fresh checks. Source verification is complete; current progress distinguishes
 pending SQL/deployment/participant acceptance from source tests.
+
+### Scripted operation
+
+For an existing reference host configuration, use the documented
+`provider-host.mjs CONFIG login`, `bind status`, `bind issue`, `bind resume`, and
+`service prepare/register/status` commands. A missing email is requested during
+interactive login; noninteractive login requires `MARKET_EMAIL`. Password input
+is hidden in a terminal and credentials remain in owner-held files.
+
+Orchestration should call these public commands rather than import their internal
+clients or write registration state. Loading credentials, preparing the running
+declaration and restarting the application remain service-operator steps. A passed
+registration check does not itself change the application's local admission mode.

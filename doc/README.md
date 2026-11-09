@@ -1,5 +1,7 @@
 # Provider documentation
 
+- [Planned service revalidation](plans/provider-revalidation.md) — connection-tool work after prolonged offline time.
+
 | Reader | Start here |
 | --- | --- |
 | Service operator | [Installation](runbooks/provider-installation.md), [connection](runbooks/provider-onboarding.md), [usage](usage.md) |

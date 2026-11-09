@@ -3,19 +3,44 @@ import { writeSkillZip } from './skill-zip.mjs';
 import { createHash } from 'node:crypto';
 import {serviceReference} from './service-reference.mjs';
 
-export const RANDOM_SKILL_BUNDLE_VERSION='1.2.0';
+export const RANDOM_SKILL_BUNDLE_VERSION='1.2.1';
 
 // Deterministic ZIP: three regular files, no links or install hooks.
 export function packSkillFiles(files) { return writeSkillZip(Object.entries(files)); }
-export async function randomSkillBundle(identity) {
-  const service = serviceReference(identity);
-  const manifest = {format:'agentpay.skill-bundle.v1',packageName:'agentpay-random',packageVersion:RANDOM_SKILL_BUNDLE_VERSION,
-    entrypoint:'scripts/random.mjs',services:{main:service}};
-  const files = {
-    'random-skill/SKILL.md':await readFile(new URL('../skills/random/SKILL.md',import.meta.url)),
-    'random-skill/agentpay.json':JSON.stringify(manifest,null,2)+'\n',
-    'random-skill/scripts/random.mjs':await readFile(new URL('../skills/random/scripts/random.mjs',import.meta.url))
+
+// One artifact per server, not an unbounded cache of service identities. Source
+// changes are deployed by restarting the process; never edit a published version
+// in place. A changed registered reference rebuilds the manifest and ZIP.
+export function createRandomSkillBundle(readSource=readFile) {
+  let cached, building;
+  return async function getBundle(identity) {
+    const service=serviceReference(identity);
+    const manifest={format:'agentpay.skill-bundle.v1',packageName:'agentpay-random',packageVersion:RANDOM_SKILL_BUNDLE_VERSION,
+      entrypoint:'scripts/random.mjs',services:{main:service}};
+    const key=JSON.stringify(manifest,null,2)+'\n';
+    // Serialize different identities too: configuration changes must not create
+    // concurrent compression work. Same-identity downloads share the promise.
+    while(building){
+      if(building.key===key)return building.promise;
+      try{await building.promise;}catch{/* A failed prior identity must not poison this request. */}
+    }
+    if(cached?.key===key)return cached.bundle;
+    cached=undefined;
+    const promise=(async()=>{
+      const [instructions,script]=await Promise.all([
+        readSource(new URL('../skills/random/SKILL.md',import.meta.url)),
+        readSource(new URL('../skills/random/scripts/random.mjs',import.meta.url))
+      ]);
+      if(instructions.length+script.length+Buffer.byteLength(key)>4*1024*1024)throw Error('SKILL_PACKAGE_TOO_LARGE');
+      const bytes=packSkillFiles({'random-skill/SKILL.md':instructions,'random-skill/agentpay.json':key,'random-skill/scripts/random.mjs':script});
+      if(bytes.length>4*1024*1024)throw Error('SKILL_PACKAGE_TOO_LARGE');
+      const bundle={bytes,sha256:createHash('sha256').update(bytes).digest('hex')};
+      cached={key,bundle};return bundle;
+    })();
+    building={key,promise};
+    try{return await promise;}finally{building=undefined;}
   };
-  const bytes = packSkillFiles(files);
-  return {bytes,sha256:createHash('sha256').update(bytes).digest('hex')};
 }
+
+// Shared by every HTTP download. Do not mutate the returned Buffer.
+export const randomSkillBundle=createRandomSkillBundle();

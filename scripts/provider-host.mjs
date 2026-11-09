@@ -9,7 +9,10 @@ import { readPrivateFile } from "../src/provider-binding-client.mjs";
 
 try {
   const [configPath, action, subaction] = process.argv.slice(2);
-  if (configPath && ['guide', 'status'].includes(action) && !subaction && process.argv.length === 4) {
+  if(configPath && action==='configure' && !subaction && process.argv.length===4){
+    const {configureProviderHostAdmission}=await import('../src/provider-host-admission.mjs');
+    console.log(JSON.stringify(await configureProviderHostAdmission(resolve(configPath)),null,2));
+  } else if (configPath && ['guide', 'status'].includes(action) && !subaction && process.argv.length === 4) {
     const child = spawn(process.execPath, [fileURLToPath(new URL('./provider-setup.mjs', import.meta.url)),
       resolve(configPath), ...(action !== 'guide' ? [`--${action}`] : [])], {
       env: { PATH: process.env.PATH || '', HOME: process.env.HOME || '', LANG: process.env.LANG || 'C.UTF-8' }, stdio: 'inherit' });
@@ -22,7 +25,7 @@ try {
       (["check", "start", "login"].includes(action) && subaction) ||
       (action === "bind" && !["status", "issue", "resume", "rotate", "recover", "reissue"].includes(subaction)) ||
       (action === "service" && !["prepare", "preview", "register", "status"].includes(subaction))) {
-    throw new Error("Usage: provider-host.mjs CONFIG guide|status|check|start|login|bind ACTION|service ACTION");
+    throw new Error("Usage: provider-host.mjs CONFIG guide|status|check|configure|start|login|bind ACTION|service ACTION");
   }
   const recovering = action === "login" || action === "bind" || (action === "service" && subaction === "status");
   const checked = checkProviderHostConfig(await loadProviderHostConfig(resolve(configPath)), Date.now(),

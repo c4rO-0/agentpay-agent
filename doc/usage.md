@@ -19,7 +19,7 @@ AgentPay protocol before this connection can succeed.
 
 The existing native reference uses MySQL for durable execution state. Its own
 runtime configuration is illustrated by `config/provider.example.env`.
-`provider-host.mjs CONFIG check|start|service prepare` operates this application;
+`provider-host.mjs CONFIG check|configure|start|service prepare` operates this application;
 these are implementation tools, not universal onboarding requirements. Database
 preparation is described in [the reference database runbook](runbooks/provider-database.md).
 
@@ -33,3 +33,17 @@ paid admission. It uses its own SQL configuration; the connection coordinator
 only displays the handoff. Human walkthrough, real SQL/platform handoffs and
 independent-host acceptance are still pending. See [progress](../progress.md) and
 [TODO](TODO.md). Existing private purchases do not prove those new flows.
+
+For an existing host managed by systemd or another process manager, use:
+
+```sh
+node scripts/provider-host.mjs /path/to/host.env configure
+```
+
+Run this as the owner of the private configuration, after binding and service
+registration. It checks the live declaration, credential, Registry qualification
+and fresh Quote before saving local admission. It preserves service identifiers,
+prices and database settings. Reload that configuration through your process
+manager, then run `node scripts/provider-host.mjs /path/to/host.env service status`.
+A successful configuration command alone does not prove the running service has
+loaded it. The installer-managed flow above continues to use its own `configure`.
