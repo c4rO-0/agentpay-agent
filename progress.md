@@ -1,5 +1,15 @@
 # AgentPay Provider progress
 
+## Current sequencing — 2026-11-09
+
+Reference package 1.2.1 was subsequently published through Market; its fixed ZIP
+and the reviewed User paid-test path were verified. Earlier pending publication
+notes below describe preparation stages. Next: integrate explicit revalidation
+after Settlement implements the approved offline lifecycle; no automatic loop.
+
+Earlier dated entries below retain their evidence and original pending states;
+this summary and TODO govern current sequencing.
+
 ## Package 1.2.1 endpoint verified — 2026-11-08
 
 Operator restart and controlled HTTP download checks passed. The running endpoint
