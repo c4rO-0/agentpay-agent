@@ -24,7 +24,7 @@ try {
   if (!configPath || !["check", ...Object.keys(scripts)].includes(action) || process.argv.length > 5 ||
       (["check", "start", "login"].includes(action) && subaction) ||
       (action === "bind" && !["status", "issue", "resume", "rotate", "recover", "reissue"].includes(subaction)) ||
-      (action === "service" && !["prepare", "preview", "register", "status"].includes(subaction))) {
+      (action === "service" && !["prepare", "preview", "register", "revalidate", "status"].includes(subaction))) {
     throw new Error("Usage: provider-host.mjs CONFIG guide|status|check|configure|start|login|bind ACTION|service ACTION");
   }
   const recovering = action === "login" || action === "bind" || (action === "service" && subaction === "status");

@@ -191,6 +191,9 @@ export async function runProviderGuide(ops, ui) {
     }
     const registered = state?.service?.registration?.registered === true;
     const qualification = state?.service?.registration?.serviceStatus?.qualification?.qualificationStatus;
+    const admission=state?.service?.registration?.admission;
+    const revalidationRequired=admission?.revalidationRequired===true;
+    const revalidationQueued=admission?.revalidation?.state==='queued';
     const waitingReview = registered && qualification !== 'qualified';
     const needsConfiguration = state?.nextStep === 'configure_service' || state?.nextStep === 'local_readiness';
     if (state?.platformComplete && !state.runtime?.nativeProvider && !ops.applicationCommand) {
@@ -200,6 +203,10 @@ export async function runProviderGuide(ops, ui) {
     if (restriction) {
       ui.heading('Service suspended');
       ui.write('The platform has restricted new Orders for this service. Existing Orders continue under their original rules. Contact AgentPay support; do not repeat registration or replace credentials.');
+    } else if(revalidationRequired){
+      ui.heading(revalidationQueued?'Revalidation in progress':'Service registration expired');
+      ui.write(revalidationQueued?'Settlement is checking endpoint control and prices. Keep the service running, then check again.':
+        'This service was unavailable for an extended period. Start it, then choose revalidate to restore AgentPay registration. Existing Orders are unchanged.');
     } else if (waitingReview) {
       ui.heading('Waiting for Registry qualification');
       const check=state.service?.registration?.qualificationCheck;
@@ -220,9 +227,9 @@ export async function runProviderGuide(ops, ui) {
     }
     ui.heading('Choose an action');
     const labels = { sign_in: 'Sign in', verify_endpoint: 'Verify endpoint control', register_service: 'Register the declared service' };
-    const recommended = state?.credentialRecovery ? 'reissue' : needsConfiguration ? 'configure'
+    const recommended = state?.credentialRecovery ? 'reissue' : revalidationRequired&&!restriction&&!revalidationQueued ? 'revalidate' : needsConfiguration ? 'configure'
       : !state || waitingReview || registered ? 'check' : 'continue';
-    const label = recommended === 'reissue' ? 'Request a new pending credential'
+    const label = recommended === 'revalidate' ? 'Verify this service again' : recommended === 'reissue' ? 'Request a new pending credential'
       : recommended === 'configure' ? 'Load application settings in another terminal'
       : recommended === 'check' ? 'Recheck status only' : labels[state?.nextStep] || 'Continue connection';
     ui.write(`* '${recommended}' ${label}\n  'details'  Connection addresses and recovery\n  'q'        Quit; keep saved progress`);
@@ -232,6 +239,11 @@ export async function runProviderGuide(ops, ui) {
       const env = ops.env();
       ui.write(`Service: ${env.AGENT_PROD_SERVICE_ID}\nEndpoint: ${env.AGENT_MCP_ENDPOINT}\nMarket: ${env.MARKET_BASE_URL}\nSettlement: ${env.SETTLEMENT_BASE_URL}\nCredential file: ${env.AGENT_PROVIDER_BINDING_CREDENTIAL_FILE}\nRecovery: doc/runbooks/provider-onboarding.md in the Agent repository`);
       if (ops.applicationCommand) ui.write(`Application command: ${ops.applicationCommand}`);
+      continue;
+    }
+    if(action==='revalidate'&&recommended==='revalidate'){
+      try{await (await ops.serviceClient()).revalidate();ui.write('Revalidation queued. Keep the service running; check again shortly.');}
+      catch(error){ui.write(`Revalidation paused: ${await ops.errorMessage(error)}`);}
       continue;
     }
     if (action === 'check' && recommended === 'check') continue;

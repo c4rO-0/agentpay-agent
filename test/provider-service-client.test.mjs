@@ -15,7 +15,7 @@ for(const scheme of ['http','https'])for(const settlementPrefix of ['','/settlem
     seller: `0x${"1".repeat(40)}`, asset: `0x${"2".repeat(40)}`, network: "eip155:8453" };
   const skillId = `0x${"a".repeat(64)}`;
   const profileHash = hashServiceProfile(profile);
-  let wrongOffer = false;
+  let wrongOffer = false;let proofLoaded=false;
   let writes = 0;let submittedDisplay;let displayAvailable=true;
   let wrongHealth = false;
   let quoteTarget = null;
@@ -39,6 +39,11 @@ for(const scheme of ['http','https'])for(const settlementPrefix of ['','/settlem
           resource: { url: profile.paymentEndpoint, method: "POST" }, requirement: { skillId, profileHash,
             seller: wrongOffer ? `0x${"3".repeat(40)}` : profile.seller, asset: profile.asset, network: profile.network } }), { status: 402 });
         if (url.pathname.endsWith('/display')) {if(!displayAvailable)throw Error('optional endpoint missing');return ok({name:'Random',summary:'Generate a number',usage:'Call the client'});}
+        if(url.pathname==='/internal/agentpay/provider-binding/authorize'){proofLoaded=true;return ok({responseHeldByProvider:true,challengeId:'challenge-synthetic'});}
+        if(url.pathname.endsWith('/register')&&JSON.parse(options.body).action==='revalidate'){
+          const posted=JSON.parse(options.body);if(posted.challengeId)assert.ok(proofLoaded);
+          return ok({revalidation:{state:posted.challengeId?'queued':'awaiting_proof',challengeId:'challenge-synthetic'}});
+        }
         if (url.pathname.endsWith("/register")) { submittedDisplay=JSON.parse(options.body).display;writes++; return ok({ skillId, profileHash,
           providerId: profile.providerId, serviceId: profile.serviceId, paymentEndpoint: profile.paymentEndpoint, created: writes === 1 }); }
         if (url.pathname.endsWith("/read")) return ok({ registered: true, profile, quoteTarget,
@@ -72,5 +77,6 @@ for(const scheme of ['http','https'])for(const settlementPrefix of ['','/settlem
     wrongHealth = true;
     assert.equal((await client.status()).localAdmission.admissionState, "unknown");
     assert.equal(writes, 1);
+    assert.equal((await client.revalidate()).state,'queued');assert.ok(proofLoaded);
   } finally { await rm(dir, { recursive: true, force: true }); }
 });

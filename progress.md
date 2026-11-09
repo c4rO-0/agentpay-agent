@@ -1,5 +1,14 @@
 # AgentPay Provider progress
 
+## Provider offline lifecycle — 2026-11-09
+
+Provider service tools now expose explicit `revalidate`; the guide offers it for
+expired Settlement admission. It loads a fresh endpoint challenge and submits one
+queued attempt through the existing registration API, preserving local state and
+credentials. Controlled client/guide tests pass. Joint Settlement rollout and actual
+operator revalidation remain pending; no package/tag publication was performed.
+
+
 ## Current sequencing — 2026-11-09
 
 Reference package 1.2.1 was subsequently published through Market; its fixed ZIP

@@ -238,3 +238,23 @@ Orchestration should call these public commands rather than import their interna
 clients or write registration state. Loading credentials, preparing the running
 declaration and restarting the application remain service-operator steps. A passed
 registration check does not itself change the application's local admission mode.
+
+## Returning after prolonged downtime
+
+If Settlement reports **Registration expired**, start your service and reopen the
+connection guide. Choose **revalidate**. The guide loads a fresh endpoint proof into
+your local server, then asks Settlement to check the service and prices. Keep the
+server online and use **check** to see the result.
+
+For scripted operation with your existing host configuration:
+
+```sh
+node scripts/provider-host.mjs /path/to/connection.env service revalidate
+node scripts/provider-host.mjs /path/to/connection.env service status
+```
+
+The same pending request is reused. A failed attempt does not restore registration;
+correct the reported issue before trying again. New attempts are limited to one per
+endpoint credential every ten minutes. Proofs expire after fifteen minutes.
+An expired or revoked credential requires the existing credential recovery flow first.
+This does not cancel old Orders, replace your service identity or rotate credentials.

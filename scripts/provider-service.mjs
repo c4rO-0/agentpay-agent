@@ -2,8 +2,8 @@
 import { createProviderServiceClient } from "../src/provider-service-client.mjs";
 const action = process.argv[2];
 try {
-  if (process.argv.length !== 3 || !["preview", "register", "status"].includes(action)) {
-    throw new Error("Usage: node scripts/provider-service.mjs preview|register|status");
+  if (process.argv.length !== 3 || !["preview", "register", "revalidate", "status"].includes(action)) {
+    throw new Error("Usage: node scripts/provider-service.mjs preview|register|revalidate|status");
   }
   const required = (name) => { const value = String(process.env[name] || "").trim();
     if (!value) throw new Error(`${name} is required`); return value; };

@@ -71,6 +71,25 @@ export function createProviderServiceClient({ settlementBaseUrl, serviceId, mcpE
         result.paymentEndpoint !== paymentEndpoint) throw new Error("Settlement registration response differs from this service");
     return { ...checked.report, registration: result };
   }
+  async function revalidate() {
+    const checked=await preflight();
+    const body={action:'revalidate',skillId,profileHash,profile:checked.profile};
+    const begun=await api('/agentpay/provider/services/register',checked.token,body);
+    const request=begun.revalidation;
+    if(['queued','succeeded'].includes(request?.state))return request;
+    if(request?.state!=='awaiting_proof'||!request.challengeId)throw Error('Settlement did not return an endpoint challenge');
+    const control=new URL(providerControlUrl||'');
+    if(!['http:','https:'].includes(control.protocol)||!['localhost','127.0.0.1','[::1]'].includes(control.hostname)||control.pathname!=='/'||control.username||control.password||control.search||control.hash)
+      throw Error('Set the local Provider control URL to load the endpoint challenge.');
+    const response=await fetchImpl(new URL('/internal/agentpay/provider-binding/authorize',control),{method:'POST',redirect:'error',signal:AbortSignal.timeout(10000),
+      headers:{authorization:`Bearer ${checked.token}`,'content-type':'application/json'},body:JSON.stringify({challengeId:request.challengeId})});
+    const result=await response.json();
+    if(!response.ok||result?.ok!==true){
+      // A previous attempt may have loaded the proof before the terminal stopped.
+      if(result?.error?.code!=='PROVIDER_CHALLENGE_NOT_AUTHORIZABLE')throw Error('Could not load endpoint proof into the local Provider. Keep the service running and retry.');
+    }else if(result.result?.responseHeldByProvider!==true||result.result.challengeId!==request.challengeId)throw Error('Local endpoint proof did not match this request');
+    return (await api('/agentpay/provider/services/register',checked.token,{...body,challengeId:request.challengeId})).revalidation;
+  }
   async function status() {
     const checked = await preflight({ checkOffer: false });
     const registration = await api("/agentpay/provider/services/read", checked.token, { skillId, profileHash });
@@ -112,6 +131,7 @@ export function createProviderServiceClient({ settlementBaseUrl, serviceId, mcpE
       code: "QUOTE_OBSERVATION_FAILED", message: "Quote observation failed; this Settlement did not return details",
       action: "retry_observation_or_contact_operator"
     } : null;
+    if(registration.admission?.revalidationRequired)nextActions.push(registration.admission.revalidation?.state==='queued'?'await_revalidation':'revalidate_service');
     if (quoteRecovery) nextActions.push(quoteRecovery.action);
     if (!registration.registered) nextActions.push("register_service");
     else {
@@ -127,7 +147,7 @@ export function createProviderServiceClient({ settlementBaseUrl, serviceId, mcpE
     return { ...checked.report, registration, readiness, readinessScope: "first_blocker_snapshot",
       localAdmission, quoteRecovery, nextActions, ...inspectionTime() };
   }
-  return Object.freeze({ preview, register, status });
+  return Object.freeze({ preview, register, revalidate, status });
 }
 
 function inspectionTime(){const checkedAtMs=assertUnixMilliseconds(Date.now());return {checkedAtMs,checkedAt:new Date(checkedAtMs).toISOString()};}

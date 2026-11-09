@@ -1,5 +1,8 @@
 # Provider TODO
 
+- [x] Implement Provider offline lifecycle integration; targeted source checks pass.
+- [ ] Deploy with Settlement after combined SQL verification; verify expiry/revalidation presentation and the normal Provider guide.
+
 ## Skill package delivery
 
 - [x] Cache generated ZIP bytes and SHA with bounded memory; coalesce concurrent builds and clear failed in-flight builds so later downloads can retry.
