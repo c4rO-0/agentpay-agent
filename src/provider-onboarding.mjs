@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { paymentEndpointForService } from '@agentpay/types';
+import { paymentEndpointForService } from '@c4roa0/agentpay-protocol';
 import { loadProviderConnectionConfig } from './provider-connection-config.mjs';
 import { readPrivateFile, createProviderBindingClient } from './provider-binding-client.mjs';
 import { createProviderServiceClient } from './provider-service-client.mjs';

@@ -1,7 +1,15 @@
 # Provider TODO
 
+- [x] Add source/build/running software identity diagnostics; controlled checks passed.
+- [x] Build/deploy reporting and verify five host identities (2026-11-10); API/Web each built under 1 GiB.
+- Deferred (2026-11-10): a separate operation-capability framework. Keep existing checks; record verified release combinations rather than adding capability probes or gates.
+
+- [x] Replace vendored types with exact public Protocol 0.14.3; update imports and lockfile.
+- [x] Deploy the dependency migration; changed process IDs, normal HTTP readiness and existing active/available Provider verified on 2026-11-10. No new paid acceptance performed.
+
 - [x] Implement Provider offline lifecycle integration; targeted source checks pass.
-- [ ] Deploy with Settlement after combined SQL verification; verify expiry/revalidation presentation and the normal Provider guide.
+- [x] Verify formal Provider CLI revalidation with the deployed Settlement and Market projection.
+- [ ] Interactive guide branch usability remains separate from CLI acceptance.
 
 ## Skill package delivery
 

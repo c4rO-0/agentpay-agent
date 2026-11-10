@@ -1,5 +1,72 @@
 # AgentPay Provider progress
 
+## Running identity rollout passed — 2026-11-10
+
+Operator execution built Market API and Web separately under verified 1 GiB
+cgroup limits (13.321 seconds and 2 minutes 21.212 seconds). All five restarted
+services report identities matching disk, and both compiled services also match
+their build manifests. Web was not ready on the first probe and matched on the
+second. HTTPS Browse/catalog, anonymous account denial, installed Protocol/private
+verifier and private platform health passed. Previous builds and logs are retained.
+No test purchase, Policy change, registration or chain reset was requested. This
+closes identity-reporting deployment, not operation-specific API compatibility.
+
+
+## Running software identity — 2026-11-10
+
+Reference Provider now participates in source/build/process identity diagnostics. This reports
+code loading separately from health, API compatibility and payment readiness.
+Source identity excludes configuration, credentials and runtime data. No service
+was restarted and no release, database or chain change was made for this stage.
+Controlled process/build tests passed; API and Web source type checks passed.
+Production builds and deployment verification subsequently passed (see above). The separate operation-capability framework was deferred by user decision
+on 2026-11-10. Keep existing version/protocol checks and record verified release
+combinations; matching identity alone does not prove compatibility.
+
+
+## Protocol dependency rollout passed — 2026-11-10
+
+Operator execution verified Protocol 0.14.3 in Agent, Settlement and Market API,
+plus private verifier 0.4.1. Market API compiled under an enforced 1 GiB cgroup;
+Settlement, Provider and Market API restarted with changed PIDs. HTTPS Skill and
+Provider reads passed; the existing service is active/available and anonymous
+account access remains denied. Private platform health passed. No new payment,
+registration, Policy or credential change. Web was not rebuilt. This is scoped
+restart/HTTP readiness evidence, not a new paid journey or broad mixed-version
+acceptance. Deployment log and old API build are retained; debug entry is read-only.
+
+
+## Public Protocol dependency migration — 2026-11-09
+
+Source now consumes exact npm `@c4roa0/agentpay-protocol` 0.14.3 with a locked
+integrity. Old types archives remain local for traceability but are no longer
+tracked or installed. No active deployment, Policy, Order, service identity or
+credential was changed; dependency installation is not a service rollout.
+
+
+## Formal Provider revalidation passed — 2026-11-09
+
+Operator execution passed the old-schema upgrade and isolated SQL checks; scratch
+tables were cleaned. The existing private reference service was prepared as expired,
+then restored through the official Provider host CLI, real endpoint proof and the
+normal worker. Repeated requests reused the same challenge; Market projected both
+expired and restored states. Identity, configuration, binding and credential stayed
+unchanged. No Order/payment or Registry write. Settlement restarted for the schema
+fix; Provider did not restart. This verifies restoration from a controlled starting
+condition, not thirty days of live downtime or all interactive guide branches.
+
+## Formal Provider revalidation rehearsal prepared — 2026-11-09
+
+User confirmed the Web deployment and approved using the existing AgentPay Random
+Demo for revalidation acceptance. The operator script checks private Anvil 31337,
+exact service identity/configuration and readiness, records a private checkpoint,
+then prepares only expired Settlement admission with a distinct rehearsal audit.
+It invokes the ordinary owner's provider-host service revalidate/status commands;
+real endpoint proof, normal worker restoration and Market projection must succeed.
+Repeated runs reuse the checkpoint; no direct success restoration, Registry writes,
+credential rotation, Order creation or payment. The prepared fixture is not evidence
+of 30 days offline. Execution remains pending.
+
 ## Provider offline lifecycle — 2026-11-09
 
 Provider service tools now expose explicit `revalidate`; the guide offers it for

@@ -4,7 +4,7 @@ import {serviceBase} from './service-url.mjs';
 import { lstat, readFile } from "node:fs/promises";
 import { parseEnv } from "node:util";
 import { isAddress } from "viem";
-import { hashServiceProfile, paymentEndpointForService } from "@agentpay/types";
+import { hashServiceProfile, paymentEndpointForService } from "@c4roa0/agentpay-protocol";
 import { quoteLifetime } from './native-provider-quote.mjs';
 
 const allowed = new Set([

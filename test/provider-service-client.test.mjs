@@ -3,7 +3,7 @@ import test from "node:test";
 import { mkdtemp, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { hashServiceProfile } from "@agentpay/types";
+import { hashServiceProfile } from "@c4roa0/agentpay-protocol";
 import { createProviderServiceClient } from "../src/provider-service-client.mjs";
 import { saveProviderBinding } from "../src/provider-binding-state.mjs";
 

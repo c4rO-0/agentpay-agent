@@ -53,10 +53,9 @@ commit, push, tag and release artifact as public disclosure.
   Do not copy real account emails, private host paths, deployment inventories or
   participant records into public documentation or fixtures.
 - `doc/records/` and historical Protocol archives remain private and ignored.
-  Only the reviewed public Protocol archive, license, README and provenance manifest
-  explicitly allowlisted in `.gitignore` may be distributed. Verify source and digest
-  before replacing them; never force-add older local artifacts. Preserve private
-  evidence outside the public tree. Package-channel design remains separate work.
+  Protocol is consumed from the exact public npm version in package.json and the
+  integrity-pinned lockfile. Do not distribute local Protocol archives or restore
+  old vendor packages. Preserve private evidence outside the public tree.
 - Before committing, inspect staged diffs and newly added files for sensitive
   content. Before pushing or publishing, inspect all outgoing commits and the
   actual archive contents, including generated files and nested dependencies.

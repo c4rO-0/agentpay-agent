@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, writeFile, readFile, rm, chmod, symlink } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { hashServiceProfile } from '@agentpay/types';
+import { hashServiceProfile } from '@c4roa0/agentpay-protocol';
 import { createProviderOnboarding, runProviderGuide, localReady } from '../src/provider-onboarding.mjs';
 import { checkProviderConnectionConfig } from '../src/provider-connection-config.mjs';
 import { encodeConfig, savePrivate } from '../src/provider-private-files.mjs';

@@ -1,6 +1,9 @@
+import {sourceIdentity} from '../scripts/software-identity.mjs';
+// Capture once for this process; a disk update must not impersonate a restart.
+const runningSoftware = sourceIdentity();
 import {randomNativeApplication} from './services/random-native.mjs';
 import {providerServiceUrls} from './provider-service-urls.mjs';
-import {parseLegacyIsoMilliseconds} from '@agentpay/types';
+import {parseLegacyIsoMilliseconds} from '@c4roa0/agentpay-protocol';
 import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { createHash } from "node:crypto";
@@ -357,6 +360,7 @@ const server = createServer(async (req, res) => {
         serviceId,
         serviceKind,
         mode: "mcp-agent",
+        software: runningSoftware,
         settlementConnected: Boolean(settlementBaseUrl),
         invokePath: `/services/${encodeURIComponent(serviceId)}/mcp/invoke`,
         challengePath: `/services/${encodeURIComponent(serviceId)}/mcp/_agentpay_challenge`,

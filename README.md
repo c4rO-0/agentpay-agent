@@ -52,9 +52,10 @@ Provider B1/B2, rolling quotes, qualification and local admission have private e
 
 Current work is tracked in progress and TODO. Dated evidence and archived instructions do not authorize deployment, migration, reset or a new purchase.
 
-The required public Protocol archive is included with its license and
-[provenance](vendor/protocol/README.md). Private experiment records and old archives
-are not distributed. Public package-channel and compatibility design remain open.
+Installation downloads the pinned public `@c4roa0/agentpay-protocol` package from
+npm. The lockfile fixes its version and integrity; no sibling Protocol checkout is
+required. See [dependency information](vendor/protocol/README.md). Private records
+and old dependency archives are not distributed.
 
 [Official Skill template releases](doc/runbooks/skill-template-release.md) use Agent
 version tags; normal Provider installation does not require the User repository.

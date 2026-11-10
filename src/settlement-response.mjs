@@ -1,4 +1,4 @@
-import { normalizeParticipantOrder, normalizeFinalizationDisclosure, normalizeOrderDeadlines, normalizeServiceAuthorization, AGENTPAY_SERVICE_AUTHORIZATION_V2, normalizeDeliveryResult, AGENTPAY_DELIVERY_RESULT_V2 } from '@agentpay/types';
+import { normalizeParticipantOrder, normalizeFinalizationDisclosure, normalizeOrderDeadlines, normalizeServiceAuthorization, AGENTPAY_SERVICE_AUTHORIZATION_V2, normalizeDeliveryResult, AGENTPAY_DELIVERY_RESULT_V2 } from '@c4roa0/agentpay-protocol';
 
 // Formal Provider API only. Do not adapt the frozen x402 Gateway envelope.
 export function readProviderSettlementResult(payload, { authorizationView = false, receiptView = false } = {}) {

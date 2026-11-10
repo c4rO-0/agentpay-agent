@@ -77,3 +77,23 @@ verifies Settlement's authorization tuple before inserting an execution record,
 and then reuses the persisted receipt identity. Rejected authorizations must not
 write an Order request binding. Existing different claim identities pause for
 review; no automatic rebind or state reset is performed.
+
+## Protocol dependency
+
+Install dependencies using the repository lockfile. The public Protocol package
+is `@c4roa0/agentpay-protocol` 0.14.3, pinned exactly; installation does not need
+a sibling Protocol checkout. Package updates require review and consumer behavior
+checks. They do not authorize contract deployment, database migration or changing
+saved identities. Do not restore the retired `@agentpay/types` file dependency.
+
+## Running software identity
+
+Software identity is diagnostic evidence, not an API compatibility or authorization
+claim. A content identifier covers the explicit code/resource and dependency-lock
+inputs in `scripts/software-identity.mjs`. No Git checkout is required. Configuration,
+credentials, runtime data and logs are excluded. Missing inputs report unknown;
+never use a source identifier to attest installed dependencies or chain contracts.
+
+The server captures this identity once at startup and includes a minimal `software`
+object in its existing health response. Editing disk files does not change a
+running process's report. Restart only in the normal deployment window.

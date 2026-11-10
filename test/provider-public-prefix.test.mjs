@@ -4,7 +4,7 @@ import {mkdtemp,writeFile,rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import mysql from 'mysql2/promise';
-import {hashServiceProfile} from '@agentpay/types';
+import {hashServiceProfile} from '@c4roa0/agentpay-protocol';
 import {providerServiceUrls,providerBaseForEndpoint} from '../src/provider-service-urls.mjs';
 import {createProviderBindingRuntime} from '../src/provider-binding-runtime.mjs';
 import {createNativeProviderRuntime} from '../src/native-provider-runtime.mjs';

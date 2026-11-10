@@ -1,4 +1,4 @@
-import {hashServiceOutput} from '@agentpay/types';
+import {hashServiceOutput} from '@c4roa0/agentpay-protocol';
 export async function executeApplication(application,context,{recovering=false,maxUsageUnits}={}){
  const operation=recovering?application.recover:application.execute;
  if(typeof operation!=='function')throw Object.assign(Error('Application must reconcile the interrupted execution before retrying'),{code:'APPLICATION_RECOVERY_REQUIRED'});

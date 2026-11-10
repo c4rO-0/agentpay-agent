@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { timingSafeEqual } from "node:crypto";
 
-import { assertUnixMilliseconds, parseLegacyIsoMilliseconds } from "@agentpay/types";
+import { assertUnixMilliseconds, parseLegacyIsoMilliseconds } from "@c4roa0/agentpay-protocol";
 
 const suffix = "/.well-known/agentpay/provider-binding/";
 

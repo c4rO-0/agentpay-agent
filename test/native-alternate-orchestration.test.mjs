@@ -5,7 +5,7 @@ import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {createHash} from 'node:crypto';
 import mysql from 'mysql2/promise';
-import {hashPrivateRequest} from '@agentpay/types';
+import {hashPrivateRequest} from '@c4roa0/agentpay-protocol';
 import {createNativeProviderRuntime} from '../src/native-provider-runtime.mjs';
 
 const b32=value=>'0x'+value.repeat(64);

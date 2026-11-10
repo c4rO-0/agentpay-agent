@@ -1,4 +1,4 @@
-import { assertUnixMilliseconds, assertUnixSeconds } from '@agentpay/types';
+import { assertUnixMilliseconds, assertUnixSeconds } from '@c4roa0/agentpay-protocol';
 import { createHash } from 'node:crypto';
 
 // Reference Provider policy; wire validUntil always remains Unix seconds.

@@ -7,7 +7,7 @@ import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import {parseEnv} from 'node:util';
-import {hashServiceProfile} from '@agentpay/types';
+import {hashServiceProfile} from '@c4roa0/agentpay-protocol';
 import {encodeConfig} from '../src/provider-private-files.mjs';
 import {saveProviderBinding} from '../src/provider-binding-state.mjs';
 import {resolveProviderRuntimeEnvironment} from '../src/provider-runtime-environment.mjs';

@@ -6,7 +6,7 @@ import {executionTimeRow,executionClock,executionCalendar} from './provider-exec
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import mysql from "mysql2/promise";
-import { normalizeServiceInvocation, AGENTPAY_FINALIZATION_V2_MEDIA_TYPE, AGENTPAY_ORDER_V2_MEDIA_TYPE, AGENTPAY_DEADLINES_V2_MEDIA_TYPE, AGENTPAY_AUTHORIZATION_V2_MEDIA_TYPE, AGENTPAY_DELIVERY_V2_MEDIA_TYPE } from "@agentpay/types";
+import { normalizeServiceInvocation, AGENTPAY_FINALIZATION_V2_MEDIA_TYPE, AGENTPAY_ORDER_V2_MEDIA_TYPE, AGENTPAY_DEADLINES_V2_MEDIA_TYPE, AGENTPAY_AUTHORIZATION_V2_MEDIA_TYPE, AGENTPAY_DELIVERY_V2_MEDIA_TYPE } from "@c4roa0/agentpay-protocol";
 import { readProviderSettlementResult } from './settlement-response.mjs';
 import { quoteLifetime, providerPaymentRequired } from './native-provider-quote.mjs';
 

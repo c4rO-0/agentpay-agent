@@ -1,4 +1,4 @@
-import {paymentEndpointForService} from '@agentpay/types';
+import {paymentEndpointForService} from '@c4roa0/agentpay-protocol';
 import {providerBase} from './service-url.mjs';
 
 export function providerServiceUrls(publicBaseUrl,serviceId){

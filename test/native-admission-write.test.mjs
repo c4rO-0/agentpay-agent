@@ -4,7 +4,7 @@ import {mkdtemp,writeFile,rm} from 'node:fs/promises';
 import {join} from 'node:path';
 import {tmpdir} from 'node:os';
 import mysql from 'mysql2/promise';
-import {hashPrivateRequest} from '@agentpay/types';
+import {hashPrivateRequest} from '@c4roa0/agentpay-protocol';
 import {createNativeProviderRuntime} from '../src/native-provider-runtime.mjs';
 import {randomNativeApplication} from '../src/services/random-native.mjs';
 test('invalid Service Authorization cannot write an execution binding or run business code',async t=>{

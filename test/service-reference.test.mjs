@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {hashServiceProfile} from '@agentpay/types';
+import {hashServiceProfile} from '@c4roa0/agentpay-protocol';
 import {serviceReference} from '../src/service-reference.mjs';
 test('public reference is independent of business and excludes mutable pricing and credentials',()=>{
  for(const serviceId of ['random','translation']){

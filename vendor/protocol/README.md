@@ -1,11 +1,10 @@
-# Public Protocol dependency
+# Protocol dependency
 
-Only the current required types archive is included. It was rebuilt from public
-[AgentPay Protocol](https://github.com/c4rO-0/agentpay-protocol) commit
-`1c6ffab3a325579ecfa165e3e5e5a9dc6d3e6ab1`. The manifest records source, toolchain
-and SHA-256; the lockfile pins the installed bytes. No old Protocol archives or
-Settlement implementation files are distributed here. LICENSE accompanies the package.
+Agent installs `@c4roa0/agentpay-protocol` 0.14.3 from npm through `npm ci`.
+`package.json` declares the version and `package-lock.json` pins package integrity.
+No Protocol checkout or local archive is needed. Historical files on an existing
+workstation are ignored and are not used during installation.
 
-This is an interim source-install dependency, not an npm publication. Future release
-packaging and compatibility work is tracked in doc/TODO.md. Archive bytes
-may include pack timestamps; verify the recorded digest for this distributed file.
+Protocol owns the public hashes, schemas and ABI definitions. Updating this package
+does not change a Provider identity, active contract deployment or saved Order.
+Review and test dependency updates before changing the pinned version.

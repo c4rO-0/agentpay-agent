@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { readProviderBinding, saveProviderBinding } from "../src/provider-binding-state.mjs";
 import {serviceReference} from "../src/service-reference.mjs";
-import {hashServiceProfile} from "@agentpay/types";
+import {hashServiceProfile} from "@c4roa0/agentpay-protocol";
 
 test("unbound service has no identity; verified endpoints persist independently", async () => {
   const dir = await mkdtemp(join(tmpdir(), "provider-binding-state-"));

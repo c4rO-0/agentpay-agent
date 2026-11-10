@@ -1,6 +1,6 @@
 import {serviceBase,serviceUrl} from './service-url.mjs';
-import {assertUnixMilliseconds} from '@agentpay/types';
-import { canonicalizeServiceProfile, hashServiceProfile, paymentEndpointForService } from "@agentpay/types";
+import {assertUnixMilliseconds} from '@c4roa0/agentpay-protocol';
+import { canonicalizeServiceProfile, hashServiceProfile, paymentEndpointForService } from "@c4roa0/agentpay-protocol";
 import { readProviderBinding } from "./provider-binding-state.mjs";
 import { readPrivateFile } from "./provider-binding-client.mjs";
 

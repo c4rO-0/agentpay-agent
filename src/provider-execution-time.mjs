@@ -1,4 +1,4 @@
-import {assertUnixMilliseconds} from '@agentpay/types';
+import {assertUnixMilliseconds} from '@c4roa0/agentpay-protocol';
 export function executionTimeMs(row,field,{nullable=false}={}) {
  const value=row[field+'_ms'];
  if(value==null){if(nullable&&row[field]==null)return null;throw Object.assign(Error(`Provider timestamp migration required: ${field}_ms`),{code:'TIMESTAMP_MIGRATION_REQUIRED'});}
