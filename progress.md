@@ -1,5 +1,17 @@
 # AgentPay Provider progress
 
+## Default local Skill connection — 2026-11-11
+
+Candidate template 0.1.2 and official bundle 1.2.2 include a fixed local loader.
+It resolves active User selection, retains legacy single-install behavior only when
+no selection record exists, and pins the selected data folder for each invocation.
+Template/example execution and concurrent package-cache regression checks passed
+using controlled local clients. No actual payment, deployment, tag or publication.
+Candidate loaders now follow User's saved per-user state location when shell and
+background XDG environments differ. Controlled loader verification passed.
+Review release artifacts before updating User's official package digest.
+
+
 ## Running identity rollout passed — 2026-11-10
 
 Operator execution built Market API and Web separately under verified 1 GiB

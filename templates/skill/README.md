@@ -76,10 +76,11 @@ and submit it. Market applies its required checks before publication.
    exposes /services/<serviceId>/agentpay/service-reference). Copy that whole JSON
    object into this package's services.main field. Keep the profile and its hash together;
    do not invent skillId, profileHash, seller, network or asset values.
-3. Complete local AgentPay User/Wallet setup using a User release with the shared
-   Runtime client. It saves runtime/connection.json in the user's private data
-   directory. Keep the installed User repository available. For another directory,
-   set AGENTPAY_USER_DATA_DIR locally. Never package the connection file or token.
+3. Complete local AgentPay User/Wallet setup. Keep the User installation available.
+   The included `scripts/agentpay-client.mjs` loads its shared client from the selected
+   local installation. Keep this loader unchanged; business changes belong in
+   `call-runtime.mjs`. An explicit `AGENTPAY_USER_DATA_DIR` selects a custom local
+   data folder. Never package connection files, caller tokens or Wallet keys.
 4. Edit validateBusinessRequest in scripts/call-runtime.mjs, the SKILL.md instructions,
    JSON arguments and result.output interpretation for your
    service. --units is the requested upper limit, not actual metered usage or a

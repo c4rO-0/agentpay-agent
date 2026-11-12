@@ -10,6 +10,7 @@ test('random wrapper delegates snapshots/recovery, preserves CLI and rejects inv
  try {
   await mkdir(join(dir,'runtime'));await mkdir(join(dir,'scripts'));
   await copyFile(new URL('../skills/random/scripts/random.mjs',import.meta.url),join(dir,'scripts/random.mjs'));
+  await copyFile(new URL('../skills/random/scripts/agentpay-client.mjs',import.meta.url),join(dir,'scripts/agentpay-client.mjs'));
   await writeFile(join(dir,'agentpay.json'),JSON.stringify({services:{main:{example:true}}}));
   await writeFile(join(dir,'runtime/connection.json'),JSON.stringify({version:'agentpay.runtime-connection.v1',clientModule:join(dir,'runtime-client.mjs')}),{mode:0o600});
   const client=join(dir,'skill-client.mjs');

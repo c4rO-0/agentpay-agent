@@ -1,5 +1,17 @@
 # Provider TODO
 
+## Default local Skill connection — 2026-11-11
+
+Candidate template 0.1.2 and official bundle 1.2.2 include a fixed local loader.
+It resolves active User selection, retains legacy single-install behavior only when
+no selection record exists, and pins the selected data folder for each invocation.
+Template/example execution and concurrent package-cache regression checks passed
+using controlled local clients. No actual payment, deployment, tag or publication.
+Candidate loaders now follow User's saved per-user state location when shell and
+background XDG environments differ. Controlled loader verification passed.
+Review release artifacts before updating User's official package digest.
+
+
 - [x] Add source/build/running software identity diagnostics; controlled checks passed.
 - [x] Build/deploy reporting and verify five host identities (2026-11-10); API/Web each built under 1 GiB.
 - Deferred (2026-11-10): a separate operation-capability framework. Keep existing checks; record verified release combinations rather than adding capability probes or gates.

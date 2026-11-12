@@ -11,9 +11,9 @@ this Skill does not generate a substitute locally.
 
 Requires Node.js >=22.22.3 and a configured local AgentPay User Runtime/Wallet
 with an unlocked Wallet and an active bounded Policy. AgentPay setup saves the
-local connection; the wrapper loads its shared client from the installed User
-repository. Keep that repository in place. For a non-default private User data
-directory, set `AGENTPAY_USER_DATA_DIR` locally. Never read or paste caller tokens,
+local connection; the included loader uses the selected User installation.
+Keep that installation in place. If explicitly using a custom private data folder,
+set `AGENTPAY_USER_DATA_DIR` locally. Never read or paste caller tokens,
 Provider credentials, Wallet keys or unlock secrets into the conversation.
 
 Resolve commands below relative to this installed Skill's directory, regardless

@@ -4,11 +4,8 @@
 // OPTIONAL: add service aliases in agentpay.json and choose validation by alias.
 // KEEP: local discovery, private-file checks and the shared runSkill call.
 // The installed AgentPay User client owns authentication, payment and recovery.
-import {constants} from 'node:fs';
-import {open,readFile} from 'node:fs/promises';
-import {join,isAbsolute,dirname} from 'node:path';
-import {homedir} from 'node:os';
-import {pathToFileURL} from 'node:url';
+import {readFile} from 'node:fs/promises';
+import {loadAgentPayClient} from './agentpay-client.mjs';
 
 // BEGIN BUSINESS INPUT — REQUIRED EDIT
 // This template accepts {"text":"hello"}. Replace its fields and limits with
@@ -55,27 +52,8 @@ function declareOutputFiles(output, alias) {
 }
 
 try {
-  // KEEP: discover the user's existing local installation. Do not put their
-  // directory, connection.json, tokens or Wallet secrets into your Skill ZIP.
-  // Users with a custom data directory set AGENTPAY_USER_DATA_DIR locally.
-  const dataDir = process.env.AGENTPAY_USER_DATA_DIR || join(homedir(),'.local/share/agentpay/user');
-  const file = join(dataDir,'runtime','connection.json');
-  const handle = await open(file,constants.O_RDONLY | constants.O_NOFOLLOW);
-  let connection;
-  try {
-    // KEEP: accept only an owner-held private regular file, not a symlink.
-    const stat = await handle.stat();
-    if (!stat.isFile() || stat.uid !== process.getuid() || (stat.mode & 0o077) || stat.size > 16384) throw Error();
-    connection = JSON.parse(await handle.readFile('utf8'));
-  } finally {
-    await handle.close();
-  }
-  if (connection.version !== 'agentpay.runtime-connection.v1' ||
-      !isAbsolute(connection.clientModule || '') || !connection.clientModule.endsWith('/runtime-client.mjs')) throw Error();
-
-  // KEEP: use the installed shared client; do not copy its payment/retry code
-  // here. This path comes from local setup, not the Provider or package metadata.
-  const {runSkill,skillClientCapabilities} = await import(pathToFileURL(join(dirname(connection.clientModule),'skill-client.mjs')).href);
+  // Keep the local loader unchanged; edit the business adapters above.
+  const {runSkill,skillClientCapabilities}=await loadAgentPayClient();
   if (!skillClientCapabilities?.includes('input-snapshots-v1')) throw Error('LOCAL_SETUP_REQUIRED');
   const manifest = JSON.parse(await readFile(new URL('../agentpay.json',import.meta.url),'utf8'));
 

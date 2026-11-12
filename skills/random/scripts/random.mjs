@@ -16,23 +16,10 @@ function validateRandomRequest(request) {
 function inputFiles() { return []; }
 function prepareRequest({request}) { return validateRandomRequest(request); }
 function outputFiles() { return []; }
-import {constants} from 'node:fs';
-import {open,readFile} from 'node:fs/promises';
-import {join,isAbsolute,dirname} from 'node:path';
-import {homedir} from 'node:os';
-import {pathToFileURL} from 'node:url';
+import {readFile} from 'node:fs/promises';
+import {loadAgentPayClient} from './agentpay-client.mjs';
 try {
- const dataDir=process.env.AGENTPAY_USER_DATA_DIR||join(homedir(),'.local/share/agentpay/user');
- const file=join(dataDir,'runtime','connection.json');
- const handle=await open(file,constants.O_RDONLY|constants.O_NOFOLLOW);
- let connection;
- try{
-  const stat=await handle.stat();
-  if(!stat.isFile()||stat.uid!==process.getuid()||(stat.mode&0o077)||stat.size>16384)throw Error();
-  connection=JSON.parse(await handle.readFile('utf8'));
- }finally{await handle.close();}
- if(connection.version!=='agentpay.runtime-connection.v1'||!isAbsolute(connection.clientModule||'')||!connection.clientModule.endsWith('/runtime-client.mjs'))throw Error();
- const {runSkill,skillClientCapabilities}=await import(pathToFileURL(join(dirname(connection.clientModule),'skill-client.mjs')).href);
+ const {runSkill,skillClientCapabilities}=await loadAgentPayClient();
  if (!['input-snapshots-v1','output-files-v1','original-request-v1'].every(cap => skillClientCapabilities?.includes(cap))) throw Error('CLIENT_UPDATE_REQUIRED');
  const manifest=JSON.parse(await readFile(new URL('../agentpay.json',import.meta.url),'utf8'));
  const args=process.argv.slice(2),[mode,min,max,...flags]=args;

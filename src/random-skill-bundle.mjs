@@ -3,9 +3,9 @@ import { writeSkillZip } from './skill-zip.mjs';
 import { createHash } from 'node:crypto';
 import {serviceReference} from './service-reference.mjs';
 
-export const RANDOM_SKILL_BUNDLE_VERSION='1.2.1';
+export const RANDOM_SKILL_BUNDLE_VERSION='1.2.2';
 
-// Deterministic ZIP: three regular files, no links or install hooks.
+// Deterministic ZIP: four regular files, no links or install hooks.
 export function packSkillFiles(files) { return writeSkillZip(Object.entries(files)); }
 
 // One artifact per server, not an unbounded cache of service identities. Source
@@ -27,12 +27,13 @@ export function createRandomSkillBundle(readSource=readFile) {
     if(cached?.key===key)return cached.bundle;
     cached=undefined;
     const promise=(async()=>{
-      const [instructions,script]=await Promise.all([
+      const [instructions,script,loader]=await Promise.all([
         readSource(new URL('../skills/random/SKILL.md',import.meta.url)),
-        readSource(new URL('../skills/random/scripts/random.mjs',import.meta.url))
+        readSource(new URL('../skills/random/scripts/random.mjs',import.meta.url)),
+        readSource(new URL('../skills/random/scripts/agentpay-client.mjs',import.meta.url))
       ]);
-      if(instructions.length+script.length+Buffer.byteLength(key)>4*1024*1024)throw Error('SKILL_PACKAGE_TOO_LARGE');
-      const bytes=packSkillFiles({'random-skill/SKILL.md':instructions,'random-skill/agentpay.json':key,'random-skill/scripts/random.mjs':script});
+      if(instructions.length+script.length+loader.length+Buffer.byteLength(key)>4*1024*1024)throw Error('SKILL_PACKAGE_TOO_LARGE');
+      const bytes=packSkillFiles({'random-skill/SKILL.md':instructions,'random-skill/agentpay.json':key,'random-skill/scripts/random.mjs':script,'random-skill/scripts/agentpay-client.mjs':loader});
       if(bytes.length>4*1024*1024)throw Error('SKILL_PACKAGE_TOO_LARGE');
       const bundle={bytes,sha256:createHash('sha256').update(bytes).digest('hex')};
       cached={key,bundle};return bundle;
