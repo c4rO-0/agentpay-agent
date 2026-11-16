@@ -13,6 +13,9 @@
 - [x] Run local behavior checks and independent public-file installation checks.
   See the [review record](security/mainnet-static-review-2026-11-16.md).
 
+- [x] Follow-up correction: explicit legacy duration-state upgrade, CLI error code,
+  idempotent preparation and HTTP classification/sanitized diagnostic regressions.
+
 ## Release work (not authorized by review)
 
 - [ ] Build/review candidate Agent template 0.1.2 and random package 1.2.2 artifacts;

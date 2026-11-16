@@ -40,3 +40,26 @@ An online endpoint alone is not sufficient to establish purchase readiness.
 The private rolling-quote verification (not distributed)
 documents the completed existing-host run. Independent-host onboarding, outage recovery and public-network acceptance remain
 separate work. No routine per-order owner signature is introduced.
+
+## Upgrading older saved service state
+
+If startup reports `PROVIDER_STATE_UPGRADE_REQUIRED`, the saved record did not
+bind delivery duration. This does not mean the configuration was necessarily
+edited. Review `AGENT_NATIVE_SERVICE_WINDOW_SECONDS` in your host configuration,
+then, from the Agent directory, run:
+
+```sh
+node scripts/provider-host.mjs /path/to/host.env service prepare
+```
+
+For a managed deployment using injected Provider environment, its operator runs
+`node scripts/provider-runtime.mjs prepare` with that same environment. Do not run
+it with an empty shell environment or delete the state file. Restart through the
+usual process manager after preparation, then check service status.
+
+Preparation preserves the Skill identity and existing execution/Order records.
+Because the old duration cannot be proven from the saved signature, it creates a
+new offer for future orders and records the updated signature format. Repeating
+preparation without changes reuses that offer. An old record with omitted duration
+that already matches can still load; preparation stamps the format without changing
+its offer. Neither path bypasses subsequent duration/price/profile checks.

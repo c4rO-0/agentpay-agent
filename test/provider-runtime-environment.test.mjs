@@ -35,3 +35,31 @@ test('admitted managed startup requires binding and matching private credential 
  await assert.rejects(resolveProviderRuntimeEnvironment(config),/differs/);
  await writeFile(config.AGENT_PROVIDER_CREDENTIAL_FILE,'fixture-control',{mode:0o600});assert.equal((await resolveProviderRuntimeEnvironment(config)).bindingPresent,true);
 });
+
+test('managed CLI explains legacy duration upgrade and prepares once without replacing service identity', async t => {
+ const {readFile} = await import('node:fs/promises');
+ const {spawn} = await import('node:child_process');
+ const dir=await mkdtemp(join(tmpdir(),'provider-state-upgrade-'));t.after(()=>rm(dir,{recursive:true,force:true}));
+ const config=fixture(dir);
+ await resolveProviderRuntimeEnvironment(config,{prepare:true});
+ // Controlled historical v1 fixture: the old signature omitted delivery duration.
+ const path=config.AGENT_PROVIDER_SERVICE_STATE_FILE;
+ const old=JSON.parse(await readFile(path,'utf8'));delete old.signatureVersion;
+ await writeFile(path,JSON.stringify(old),{mode:0o600});
+ const legacyBytes=await readFile(path,'utf8');
+ const upgradedConfig={...config,AGENT_NATIVE_SERVICE_WINDOW_SECONDS:'600'};
+ async function command(action){
+  const child=spawn(process.execPath,[new URL('../scripts/provider-runtime.mjs',import.meta.url).pathname,action],{env:{PATH:process.env.PATH,...upgradedConfig},stdio:['ignore','pipe','pipe']});
+  let out='',err='';child.stdout.on('data',x=>out+=x);child.stderr.on('data',x=>err+=x);
+  const code=await new Promise((resolve,reject)=>{child.on('error',reject);child.on('exit',resolve);});return {code,out,err};
+ }
+ const refused=await command('start');assert.equal(refused.code,1);
+ const failure=JSON.parse(refused.err).error;
+ assert.equal(failure.code,'PROVIDER_STATE_UPGRADE_REQUIRED');assert.match(failure.message,/provider-runtime.mjs prepare/);
+ assert.equal(await readFile(path,'utf8'),legacyBytes,'startup cannot mutate the legacy record');
+ const prepared=await command('prepare');assert.equal(prepared.code,0,prepared.err);
+ const next=JSON.parse(prepared.out);assert.equal(next.skillId,old.skillId);assert.notEqual(next.offerId,old.offerId);
+ assert.equal((await resolveProviderRuntimeEnvironment(upgradedConfig)).env.AGENT_NATIVE_OFFER_ID,next.offerId);
+ const repeated=await command('prepare');assert.equal(repeated.code,0);assert.equal(JSON.parse(repeated.out).offerId,next.offerId);
+ await assert.rejects(resolveProviderRuntimeEnvironment({...upgradedConfig,AGENT_NATIVE_SERVICE_WINDOW_SECONDS:'900'}),/declaration changed/);
+});

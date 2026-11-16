@@ -4,7 +4,7 @@ import { randomBytes, randomUUID, createHash } from "node:crypto";
 const bytes32 = (value) => /^0x[0-9a-f]{64}$/.test(value || "");
 const version = "agentpay.provider-service-state.v1";
 const id = () => `0x${randomBytes(32).toString("hex")}`;
-function signature(env) {
+function signature(env, { legacy = false } = {}) {
   return createHash("sha256")
     .update(
       JSON.stringify([
@@ -21,7 +21,7 @@ function signature(env) {
           `rolling:${env.AGENT_NATIVE_QUOTE_TTL_SECONDS || "600"}`,
         // Duration is part of the offer, including fixed-expiry offers. Preserve the
         // old signature when omitted, so unchanged installations need no new offer.
-        ...(env.AGENT_NATIVE_SERVICE_WINDOW_SECONDS === undefined
+        ...(legacy || env.AGENT_NATIVE_SERVICE_WINDOW_SECONDS === undefined
           ? []
           : [env.AGENT_NATIVE_SERVICE_WINDOW_SECONDS]),
       ]),
@@ -44,6 +44,7 @@ async function read(path) {
     const state = JSON.parse(await readFile(path, "utf8"));
     if (
       state.version !== version ||
+      (state.signatureVersion !== undefined && state.signatureVersion !== 2) ||
       !bytes32(state.skillId) ||
       !bytes32(state.offerId) ||
       !/^[0-9a-f]{64}$/.test(state.signature || "") ||
@@ -94,17 +95,24 @@ export async function prepareProviderServiceState(path, env) {
     const prior = await read(path);
     if (prior) checkIdentity(prior, env);
     const nextSignature = signature(env);
-    if (prior?.signature === nextSignature) return prior;
-    if (prior && env.AGENT_NATIVE_OFFER_ID)
+    if (prior?.signature === nextSignature && prior.signatureVersion === 2)
+      return prior;
+    const unchanged = prior?.signature === nextSignature;
+    if (prior && !unchanged && env.AGENT_NATIVE_OFFER_ID)
       throw new Error(
         "changed offer requires removing the manual offerId override before prepare",
       );
     const next = {
       version,
+      signatureVersion: 2,
       endpoint: env.AGENT_MCP_ENDPOINT,
       serviceId: env.AGENT_PROD_SERVICE_ID,
       skillId: prior?.skillId || env.AGENT_NATIVE_SKILL_ID || id(),
-      offerId: prior ? id() : env.AGENT_NATIVE_OFFER_ID || id(),
+      offerId: unchanged
+        ? prior.offerId
+        : prior
+          ? id()
+          : env.AGENT_NATIVE_OFFER_ID || id(),
       signature: nextSignature,
     };
     await writeFile(temporary, `${JSON.stringify(next, null, 2)}\n`, {
@@ -131,9 +139,23 @@ export async function loadProviderServiceState(
       "service identity is missing; run service prepare first (restore the original file if this service already exists)",
     );
   checkIdentity(state, env);
-  if (!allowOfferDrift && state.signature !== signature(env))
+  if (!allowOfferDrift && state.signature !== signature(env)) {
+    // Old records did not bind duration. Even if all other fields match, we
+    // cannot infer their former duration or silently reuse the old offer.
+    if (
+      state.signatureVersion === undefined &&
+      state.signature === signature(env, { legacy: true })
+    ) {
+      throw Object.assign(
+        new Error(
+          "Saved service state predates delivery-duration verification. Review the configured duration, then run node scripts/provider-host.mjs CONFIG service prepare (with your host config), or node scripts/provider-runtime.mjs prepare with the managed Provider environment, before restarting. Preparation keeps the Skill identity and Orders, but creates a new offer. Do not delete the state file.",
+        ),
+        { code: "PROVIDER_STATE_UPGRADE_REQUIRED" },
+      );
+    }
     throw new Error(
       "service declaration changed; run service prepare and restart the Provider before preview/register",
     );
+  }
   return state;
 }

@@ -1,3 +1,4 @@
+import { providerHttpFailure } from "./provider-http-errors.mjs";
 import {sourceIdentity} from '../scripts/software-identity.mjs';
 // Capture once for this process; a disk update must not impersonate a restart.
 const runningSoftware = sourceIdentity();
@@ -326,13 +327,9 @@ async function handleTool(tool, input) {
 // routing, body reads and application handlers so malformed requests cannot stop it.
 const server = createServer((req, res) => {
   void handleRequest(req, res).catch(error => {
+    const failure = providerHttpFailure(error);
     if (res.headersSent) { res.destroy(); return; }
-    const malformed = error instanceof URIError || error?.code === "ERR_INVALID_URL";
-    const status = malformed ? 400 : error?.code === "REQUEST_TOO_LARGE" ? 413 : 500;
-    json(res, status, {ok:false, error:{
-      code: malformed ? "INVALID_INPUT" : error?.code === "REQUEST_TOO_LARGE" ? error.code : "PROVIDER_REQUEST_FAILED",
-      message: malformed ? "Invalid request address" : status === 413 ? "Request body exceeds 2 MiB" : "Provider could not complete this request; retry the original request"
-    }});
+    json(res, failure.status, failure.payload);
   });
 });
 

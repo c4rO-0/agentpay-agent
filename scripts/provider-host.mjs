@@ -77,4 +77,4 @@ try {
     child.on("exit", (code, signal) => { process.exitCode = code ?? (signal ? 1 : 0); });
   }
   }
-} catch (error) { console.error(JSON.stringify({ ok: false, error: { message: error.message } })); process.exitCode = 1; }
+} catch (error) { console.error(JSON.stringify({ ok: false, error: { code: error.code || "PROVIDER_COMMAND_FAILED", message: error.message } })); process.exitCode = 1; }

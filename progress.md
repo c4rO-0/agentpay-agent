@@ -1,5 +1,14 @@
 # Provider progress
 
+## Correction review — 2026-11-16
+
+Follow-up review found two omissions, now corrected: old duration-unaware state is
+identified with a specific upgrade code and normal preparation instructions; HTTP
+fallback preserves reviewed client-error categories and emits correlated, sanitized
+source-location diagnostics for unexpected failures. Managed CLI recovery verifies
+stable Skill identity and one-time offer preparation. Final 109 tests passed; no old
+Order or live state changed.
+
 ## Current source — 2026-11-16
 
 The bounded R1–R10 review is complete; see the [review record](doc/security/mainnet-static-review-2026-11-16.md)

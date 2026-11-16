@@ -84,3 +84,27 @@ implemented here. Current release status remains in [progress](../../progress.md
 
 Scoped source and documentation are ready for commit. Publication/deployment are
 separate actions. The next component review is Settlement.
+
+## Focused follow-up correction
+
+A second review found two omissions in the original closeout:
+
+- Duration-unaware saved records could fail startup under unchanged configuration.
+  Startup now reports `PROVIDER_STATE_UPGRADE_REQUIRED` when the legacy signature
+  matches but duration is unverified. It does not mutate the record. Explicit
+  normal preparation records signature format 2, preserves Skill identity, and
+  creates one fresh offer when needed; repeats preserve it. Other declaration
+  mismatches remain rejected. Host and managed CLIs preserve the error code.
+- The HTTP fallback classified known cross-service rejection as 500 and discarded
+  diagnostic context. Reviewed public codes now retain their status/category.
+  Unknown errors emit a correlation ID and bounded own-module locations, omitting
+  error messages, request data, URLs, credentials and private paths. Diagnostic
+  sink failure cannot escape the fallback. The test no longer expects the wrong 500.
+
+Verification uses a controlled historical state fixture through the real managed
+CLI, actual HTTP listener rejection checks, and focused diagnostic-redaction checks.
+See [upgrade instructions](../runbooks/rolling-quotes.md). No live migration,
+service restart or transaction was performed.
+
+Correction verification: final sequential `npm test` passed **109 tests**, zero
+failed/skipped, on Linux / Node 22.22.3. No real database or chain was used.

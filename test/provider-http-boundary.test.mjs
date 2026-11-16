@@ -65,10 +65,11 @@ test(
     for (const [path, status] of [
       ["http://[", 400],
       ["/services/%ZZ/mcp/provider-profile", 400],
-      ["/services/another/mcp/provider-profile", 500],
+      ["/services/another/mcp/provider-profile", 400],
     ]) {
       const result = await call(path);
       assert.equal(result.status, status);
+      assert.equal(result.body.error.code, path.includes("another") ? "POLICY_VIOLATION" : "INVALID_INPUT");
       assert.equal((await call("/health")).status, 200);
     }
     const large = await call(
@@ -107,4 +108,21 @@ test("unknown configured business never silently runs random", () => {
       ? delete process.env.AGENT_PROD_KIND
       : (process.env.AGENT_PROD_KIND = before);
   }
+});
+
+
+test("unexpected HTTP failures correlate safe diagnostics without leaking error contents", async () => {
+  const { providerHttpFailure } = await import('../src/provider-http-errors.mjs');
+  const error = Error('fixture-private-password and private request');
+  error.code = 'fixture-private-code';
+  error.stack = `Error: fixture-private-password\n    at handler (${new URL('../src/index.mjs', import.meta.url).href}:401:7)`;
+  const logs = [];
+  const failure = providerHttpFailure(error, { report: line => logs.push(line) });
+  assert.equal(failure.status, 500);
+  assert.equal(failure.payload.error.code, 'PROVIDER_REQUEST_FAILED');
+  const diagnostic = JSON.parse(logs[0]);
+  assert.equal(diagnostic.diagnosticId, failure.payload.error.diagnosticId);
+  assert.deepEqual(diagnostic.locations, [{ module: 'index.mjs', line: 401, column: 7 }]);
+  assert.doesNotMatch(JSON.stringify([failure, logs]), /fixture-private|file:\/\/|private request/);
+  assert.equal(providerHttpFailure(error, { report() { throw Error('sink failed'); } }).status, 500);
 });
