@@ -26,3 +26,16 @@ test('Provider requests new disclosure only from formal API, leaving x402 transp
   assert.equal(captured[0].accept,'application/vnd.agentpay.participant-order-v2+json, application/vnd.agentpay.finalization-v2+json, application/vnd.agentpay.order-deadlines-v2+json, application/vnd.agentpay.service-authorization-v2+json, application/vnd.agentpay.delivery-result-v2+json');assert.equal(captured[1].accept,'*/*');
  }finally{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
 });
+
+test('credential-bearing Settlement posts refuse redirects without forwarding the body', async () => {
+ let forwarded=0;
+ const server=createServer((req,res)=>{
+  if(req.url==='/redirect'){res.writeHead(307,{location:'/sink'});res.end();}
+  else {forwarded++;res.end('{}');}
+ });
+ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+ try {
+  await assert.rejects(postSettlementJson(`http://127.0.0.1:${server.address().port}/redirect`,'test-token',{private:'fixture'},1000));
+  assert.equal(forwarded,0);
+ } finally {server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
+});

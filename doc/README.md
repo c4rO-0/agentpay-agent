@@ -1,6 +1,6 @@
 # Provider documentation
 
-- [Planned service revalidation](plans/provider-revalidation.md) — connection-tool work after prolonged offline time.
+- [Service revalidation](plans/provider-revalidation.md) — implemented connection-tool behavior after prolonged offline time.
 
 | Reader | Start here |
 | --- | --- |
@@ -21,3 +21,11 @@ role-authorized platform APIs; they do not need platform source, files or SQL.
 Private experiment records and historical catalogs are retained outside this public
 repository. Current progress describes evidence limits, not instructions to repeat
 old deployments or resets.
+
+## Review and history
+
+- [2026-11-16 static review](security/mainnet-static-review-2026-11-16.md): findings,
+  corrections and the limits of local evidence.
+- [Earlier progress](archive/pre-review-progress-2026-11-16.md) and
+  [earlier TODO](archive/pre-review-todo-2026-11-16.md): superseded chronology,
+  retained for traceability rather than current instructions.

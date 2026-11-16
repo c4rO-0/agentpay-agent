@@ -36,12 +36,12 @@ function memoryDatabase(){
  };
  return {rows,queries,locks,pool:{query:async()=>[[],[]],getConnection:async()=>connection,end:async()=>{}}};
 }
-// Old environment settings must never terminate a normal service process.
-for (const retiredCrashPoint of ['claimed','accepted','completed','receipt_accepted'])
-test(`alternate business recovery ignores retired crash setting: ${retiredCrashPoint}`,async t=>{
+// Retired process probes are deliberately inert; one recovery journey covers them
+// together rather than repeating the same behavior for removed injection points.
+test('alternate business preserves output and receipt recovery with retired probes set',async t=>{
  const dir=await mkdtemp(join(tmpdir(),'alternate-provider-'));t.after(()=>rm(dir,{recursive:true,force:true}));
  const credential=join(dir,'credential');await writeFile(credential,'fixture-credential',{mode:0o600});
- const env={AGENTPAY_NATIVE_PROVIDER_CRASH_AFTER:retiredCrashPoint,AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted',AGENT_PROVIDER_CREDENTIAL_FILE:credential,
+ const env={AGENTPAY_NATIVE_PROVIDER_NEGATIVE_PROBE:'true',AGENTPAY_NATIVE_PROVIDER_TAMPER_RESPONSE:'true',AGENTPAY_NATIVE_PROVIDER_CRASH_AFTER:'accepted',AGENTPAY_NATIVE_PROVIDER_ENABLED:'true',AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted',AGENT_PROVIDER_CREDENTIAL_FILE:credential,
   AGENT_NATIVE_NETWORK:'eip155:31337',AGENT_PROVIDER_DB_USER:'fixture',AGENT_PROVIDER_DB_NAME:'fixture',AGENT_NATIVE_ASSET:'0x'+'2'.repeat(40),
   AGENT_NATIVE_SKILL_ID:b32('3'),AGENT_NATIVE_PROFILE_HASH:b32('4'),AGENT_NATIVE_SELLER:'0x'+'1'.repeat(40),
   AGENT_NATIVE_OFFER_ID:b32('5'),AGENT_NATIVE_QUOTE_TTL_SECONDS:'600'};
@@ -79,6 +79,8 @@ test(`alternate business recovery ignores retired crash setting: ${retiredCrashP
  assert.equal(db.rows.get(b32('6')).state,'completed',JSON.stringify(first.payload));assert.equal(db.rows.get(b32('6')).usage_units,'2');
  assert.equal(db.rows.get(b32('6')).output_hash,'0x'+createHash('sha256').update(db.rows.get(b32('6')).output_json).digest('hex'));
  const resumed=await invoke(b32('6'),'hello');assert.equal(resumed.status,200);assert.equal(resumed.payload.result.output.answer.text,'hello');
+ assert.equal(resumed.payload.result.outputHash,db.rows.get(b32('6')).output_hash);
+ assert.equal(Object.hasOwn(resumed.payload,'negativeProbe'),false);
  assert.equal(executeCount,1);assert.equal(receipts[0].receiptId,receipts[1].receiptId);
  const interrupted=await invoke(b32('7'),'interrupted');assert.equal(interrupted.status,502);assert.equal(db.rows.get(b32('7')).state,'executing');
  const reconciled=await invoke(b32('7'),'interrupted');assert.equal(reconciled.status,200);

@@ -1,93 +1,61 @@
 # Provider TODO
 
-## Default local Skill connection — 2026-11-11
+## Review closeout — 2026-11-16
 
-Candidate template 0.1.2 and official bundle 1.2.2 include a fixed local loader.
-It resolves active User selection, retains legacy single-install behavior only when
-no selection record exists, and pins the selected data folder for each invocation.
-Template/example execution and concurrent package-cache regression checks passed
-using controlled local clients. No actual payment, deployment, tag or publication.
-Candidate loaders now follow User's saved per-user state location when shell and
-background XDG environments differ. Controlled loader verification passed.
-Review release artifacts before updating User's official package digest.
+- [x] Cover responsibilities, public entries, execution/recovery, security,
+  dependencies, readability, operations, tests, documentation and release scope.
+- [x] Repair malformed HTTP handling/body bounds, unknown business selection,
+  prefixed readiness and fixed-quote duration identity.
+- [x] Remove retired failure injection from the runtime; retain isolated test fixtures.
+- [x] Reject credential-bearing redirects, prune expired challenges and verify all
+  generic template client requirements before invoking User.
+- [x] Consolidate current documentation and explain persistence/recovery boundaries.
+- [x] Run local behavior checks and independent public-file installation checks.
+  See the [review record](security/mainnet-static-review-2026-11-16.md).
 
+## Release work (not authorized by review)
 
-- [x] Add source/build/running software identity diagnostics; controlled checks passed.
-- [x] Build/deploy reporting and verify five host identities (2026-11-10); API/Web each built under 1 GiB.
-- Deferred (2026-11-10): a separate operation-capability framework. Keep existing checks; record verified release combinations rather than adding capability probes or gates.
+- [ ] Build/review candidate Agent template 0.1.2 and random package 1.2.2 artifacts;
+  publish through their existing Tag / Provider-download → Market paths.
+  Keep immutable published ZIPs and User's current official pin until acceptance.
+- [ ] Explicitly upgrade the exact Protocol dependency when its reviewed fixes are
+  released; record supported combinations, without adding a new capability framework.
+- [ ] Establish public CI for independent installation, behavior and template integrity.
 
-- [x] Replace vendored types with exact public Protocol 0.14.3; update imports and lockfile.
-- [x] Deploy the dependency migration; changed process IDs, normal HTTP readiness and existing active/available Provider verified on 2026-11-10. No new paid acceptance performed.
+## Retained acceptance
 
-- [x] Implement Provider offline lifecycle integration; targeted source checks pass.
-- [x] Verify formal Provider CLI revalidation with the deployed Settlement and Market projection.
-- [ ] Interactive guide branch usability remains separate from CLI acceptance.
+- [ ] Fresh independent-host two-flow guide: login, endpoint proof, registration,
+  Registry/Quote wait and local paid admission, including public configuration
+  handoff, database privileges, supervision and multiple endpoint isolation.
+- [ ] Interactive revalidation/reissue usability and credential response-loss,
+  expiry/rotation, restriction and sibling-service boundaries. Formal revalidation
+  CLI is already implemented and has scoped private acceptance.
+- [ ] Selected delivery duration/price, original-result retrieval, bounded evidence,
+  withdrawal/order drain and financial outcomes with Settlement. Never regenerate
+  costly work to answer an original-result retrieval request.
+- [ ] Prefixed endpoint registration and optional display introduction through the
+  actual platform. Controlled reference readiness tests are not remote registration.
+- [ ] Coordinate compatible User release, immutable Skill download and paid recovery
+  for candidate packages. Template hook tests use controlled clients, not real payment.
+- [ ] Selected-network asset/profile/credentials and capped actual payment/service.
 
-## Skill package delivery
+## Deferred improvements and boundaries
 
-- [x] Cache generated ZIP bytes and SHA with bounded memory; coalesce concurrent builds and clear failed in-flight builds so later downloads can retry.
-- [x] Verify identical concurrent downloads, changed service references, restart after source/version updates, and build failure recovery; never serve a stale artifact for changed inputs.
-- [ ] After Market recovery verification, bump the reference package version and deploy the Provider download endpoint; publish the exact ZIP downloaded there through Market. Preserve existing published versions and the current User test pin until replacement acceptance.
+- [ ] Reconcile duplicate ISO `checkedAt` with `checkedAtMs` through a scoped
+  compatibility change; do not mechanically rename wire fields.
+- [ ] Define per-Order contract-generation compatibility before multi-generation service.
+- [ ] Refine bounded maintenance retry while keeping original request/execution identity.
+- [ ] Review owner-assisted stale installation/guide lock recovery; do not delete a
+  lock automatically just because a command is slow or another process may own it.
+- [ ] Bound legacy Serper adapter HTTP duration before expanding legacy service use;
+  it is separate from the current native reference.
+- [ ] Retire guarded legacy rehearsal scripts only with their deployment consumers.
+  The legacy Ticket API remains compatibility-only.
 
-## Existing-host admission
-
-- [x] Official configure command and controlled CLI failure/success verification.
-- [x] Verify reference-host process-manager reload and live paid readiness through the official command.
-- [ ] Complete matching Skill and paid-path acceptance.
-
-## Service revalidation
-
-- [x] Record [the planned connection-tool integration](plans/provider-revalidation.md).
-- [ ] After Settlement API readiness, add explicit service-scoped revalidation and concise connection guidance; no automatic retry loop that bypasses expiry.
-- [ ] Verify authentication recovery, profile preservation, idempotency, restriction handling and retained original-Order access.
-
-## Public source and distribution
-
-- [x] Publish reviewed source history and Agent v0.1.1 template tag; anonymous refs verified.
-- [x] Include one reviewed public Protocol dependency with provenance/license; exclude old artifacts.
-- [x] Repair public documentation links and separate platform tasks from Provider work.
-- [x] Add contribution/security entries and private-file ignore rules.
-- [x] Independent public-file snapshot: offline dependency installation and all 100 local tests passed; no live database/chain acceptance implied.
-- [ ] Agree public Protocol distribution and supported compatibility requirements.
-- [ ] Establish public CI for independent Provider tests and template integrity.
-
-## Next closed loops
-
-- [ ] Verify actual duration/price acceptance, original-result retrieval, varied
-  bounded evidence, withdrawal/reopening and financial outcomes with Settlement.
-  Retrieval must not regenerate costly work; result backups remain a recommendation.
-
-## Stage 1 — remaining Provider/harness acceptance
-
-- [ ] Verify corrected full two-flow guide on an independent host: account login,
-  endpoint control, registration, automatic Registry wait, rolling Quote and local
-  admission. Report qualified Registry with failed local readiness explicitly.
-- [ ] Verify public deployment/config download handoff without hidden operator inputs,
-  local database privileges, service supervision and multiple endpoint isolation.
-- [ ] Reconcile duplicate ISO checkedAt in the status client as a scoped timestamp
-  correction; source still returns it alongside checkedAtMs.
-- [ ] Verify optional display introduction through actual registration and profile scope.
-- [ ] Complete new prefixed endpoint identity/settings registration; preserve old requests.
-- [ ] Verify response loss/reissue/rotation, offline/expired Quote and sibling-service
-  recovery where evidence is missing. Existing offline recovery is not every boundary.
-- [ ] Verify selected withdrawal/order drain and credential/binding cleanup with
-  Settlement; accepted work retains its obligations, unaccepted closure follows deadlines.
-- [ ] Coordinate current User release and reviewed onboarding digest; verify official
-  wrapper/harness installation and scoped paid recovery. Do not rewrite immutable published package versions.
-- [ ] Review retained packaged request-ID minimum validation before enabling affected packages.
-
-## Stage 2/3 and release work
-
-- [ ] Support maintenance responses with bounded original-request retry and intact execution history.
-- [ ] Verify selected-network asset/profile/credentials and actual small-value service/payment.
-- [ ] Specify per-Order contract-generation compatibility before multi-generation service.
-- [ ] Verify external Providers follow public guidance without platform SQL/files;
-  operational load, credential security and application-specific recovery remain explicit.
-
-## Scope of retained work
-
-[Backlog scope](reference/documentation-backlog.md) summarizes preserved acceptance.
-Private historical snapshots remain outside this public repository. Platform-only
-SQL retirement and Market schema-test tasks remain with their owning projects;
-removing them here neither resolves nor cancels them. Publication and source tests
-do not establish public-network, human-onboarding or financial acceptance.
+Application-specific recovery, operational capacity and independent Provider guidance
+remain explicit limits. The [earlier queue](archive/pre-review-todo-2026-11-16.md)
+retains every old unchecked item. Previously pending package 1.2.1 publication/paid
+acceptance, revalidation implementation and public Protocol distribution are complete
+within the evidence described in [progress](../progress.md); they are not new tasks.
+Private platform SQL/Market work stays with those projects; see
+[backlog scope](reference/documentation-backlog.md).

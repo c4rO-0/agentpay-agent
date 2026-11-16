@@ -185,7 +185,15 @@ async function postSettlementTicket(path, payload) {
 
 async function readBodyBuffer(req) {
   const chunks = [];
-  for await (const chunk of req) {
+  let length = 0;
+  // Reference transport limit, not a business input schema. Reject before retaining
+  // an unbounded body; large-file services should use explicit file adapters.
+  for await (const chunk of req.iterator({destroyOnReturn:false})) {
+    length += chunk.length;
+    if (length > 2 * 1024 * 1024) {
+      req.resume();
+      throw Object.assign(createToolError("REQUEST_TOO_LARGE", "Request body exceeds 2 MiB"), {status: 413});
+    }
     chunks.push(Buffer.from(chunk));
   }
   return chunks.length ? Buffer.concat(chunks) : Buffer.alloc(0);
@@ -238,7 +246,8 @@ function createToolError(code, message, details = {}) {
 function toolErrorResponse(err) {
   const code = err?.code || "SETTLEMENT_FAILED";
   const statusCode =
-    code === "NOT_FOUND" ? 404
+    code === "REQUEST_TOO_LARGE" ? 413
+      : code === "NOT_FOUND" ? 404
       : code === "CONFLICT" ? 409
         : code === "UNAUTHORIZED" ? 401
           : code === "TRUSTED_SETTLEMENT_SIGNERS_MISSING" ? 503
@@ -313,7 +322,21 @@ async function handleTool(tool, input) {
   throw createToolError("INVALID_INPUT", `unsupported tool: ${tool}`);
 }
 
-const server = createServer(async (req, res) => {
+// Node does not catch rejected async request callbacks. Keep one boundary around
+// routing, body reads and application handlers so malformed requests cannot stop it.
+const server = createServer((req, res) => {
+  void handleRequest(req, res).catch(error => {
+    if (res.headersSent) { res.destroy(); return; }
+    const malformed = error instanceof URIError || error?.code === "ERR_INVALID_URL";
+    const status = malformed ? 400 : error?.code === "REQUEST_TOO_LARGE" ? 413 : 500;
+    json(res, status, {ok:false, error:{
+      code: malformed ? "INVALID_INPUT" : error?.code === "REQUEST_TOO_LARGE" ? error.code : "PROVIDER_REQUEST_FAILED",
+      message: malformed ? "Invalid request address" : status === 413 ? "Request body exceeds 2 MiB" : "Provider could not complete this request; retry the original request"
+    }});
+  });
+});
+
+async function handleRequest(req, res) {
   const url = new URL(req.url || "/", "http://127.0.0.1");
 
   if (req.method === 'GET' && url.pathname === `/services/${encodeURIComponent(serviceId)}/agentpay/display`) {
@@ -597,7 +620,7 @@ const server = createServer(async (req, res) => {
       message: "route not found"
     }
   });
-});
+}
 
 server.listen(port, host, () => {
   console.log(`[agent] listening on ${host}:${port}`);
@@ -609,5 +632,12 @@ server.listen(port, host, () => {
 });
 
 for (const signal of ["SIGINT", "SIGTERM"]) process.once(signal, () => {
-  void nativeProviderRuntime?.close().finally(() => server.close(() => process.exit(0)));
+  // Stop accepting requests first; drain current work before closing its storage.
+  // This also works when native paid mode is disabled.
+  server.close(() => {
+    Promise.resolve(nativeProviderRuntime?.close()).then(
+      () => process.exit(0),
+      () => { console.error("Provider storage shutdown failed"); process.exit(1); },
+    );
+  });
 });

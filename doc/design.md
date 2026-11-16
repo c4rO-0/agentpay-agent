@@ -1,6 +1,6 @@
 # Agent Design
 
-## Approved Composition Direction — 2026-09-26
+## Service and Skill roles
 
 The Provider supplies paid services independently of Market package
 publication. A calling Skill may be authored by the Provider, a third party or
@@ -11,7 +11,7 @@ optional reference authoring path, not the exclusive Skill distribution model.
 
 
 
-The installed Skill lives in the sibling open `user` runtime. The Provider
+The installed Skill uses the buyer’s separately installed User Runtime. The Provider
 server lives in this supplier-operated repository; they are separate logical
 roles and processes. Private input/output bypasses Settlement. Only request/output hashes,
 usage, delivery metadata, and identifiers needed for settlement are reported.
@@ -21,17 +21,17 @@ cannot choose money values: Settlement derives price and fee from the frozen
 quote. Duplicate authorization, execution, or receipt requests must be
 idempotent or rejected explicitly.
 
-M7 evidence starts the real processes and uses formal IPC/HTTP. A harness may
+Behavior verification starts real processes and uses formal IPC/HTTP where process
+claims are made. A harness may
 orchestrate failures and assertions but may not fabricate state through direct
 database writes, internal stores, or static authorization.
-# Skill package boundary
+## Skill package boundary
 
 The Provider authors the versioned user-side Skill adapter and may offer its
 package directly. Market stores a byte-for-byte downloadable copy for
 discovery and installation. The Provider server remains the separate private
 service implementation and never packages its M2M Credential or execution
-secrets into a Skill. See the project-wide
-distribution boundary.
+secrets into a Skill. See [Skill publishing](runbooks/skill-publishing.md).
 
 ## Guided operational composition
 

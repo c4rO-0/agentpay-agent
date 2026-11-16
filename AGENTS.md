@@ -81,7 +81,8 @@ completes Settlement's Endpoint Control Challenge.
 ## Documentation navigation
 
 Use `doc/README.md` to select documents by role and function. Keep current work in
-`progress.md` and `doc/TODO.md`; put dated verification in `doc/records/` and superseded
+`progress.md` and `doc/TODO.md`; put sanitized public reviews in `doc/security/`
+(`doc/records/` is private and ignored here), and superseded
 chronology in `doc/archive/`. Archived pending tasks do not authorize repeating old
 operations. Keep this repository independently readable; do not link parent workspace
 documentation. Update local links and the catalog when reorganizing documents.
@@ -95,3 +96,17 @@ Market consumes a validated prebuilt ZIP from remote Agent version tags, retaini
 a bundled fallback. Do not reintroduce duplicate source generators there.
 Template versions come from Agent package.json; commit templates/release artifacts
 before tagging. Do not use independent template tags or require GitHub Releases.
+
+## Whole-repository review
+
+Cover responsibilities/generality, public entry-to-state flows, failure/concurrency
+recovery, trust/funds, interfaces/dependencies, comments/readability, operator errors,
+behavior tests, human documentation and release/operations. Record findings, fixes,
+evidence limits and deferred work in one sanitized local review, then reconcile
+progress/TODO. Key comments explain sequencing, trust and recovery, not every line.
+
+Small implementation defects can be corrected directly. Pause and discuss any
+major change to transaction decisions, authority or the core state machine before
+editing it. After correction review, commit only the scoped work; commit does not
+authorize push, tags, publication, deployment or live financial tests. Do not broaden
+review into a redesign or repeat old acceptance without a concrete regression.

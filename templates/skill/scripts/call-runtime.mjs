@@ -54,7 +54,7 @@ function declareOutputFiles(output, alias) {
 try {
   // Keep the local loader unchanged; edit the business adapters above.
   const {runSkill,skillClientCapabilities}=await loadAgentPayClient();
-  if (!skillClientCapabilities?.includes('input-snapshots-v1')) throw Error('LOCAL_SETUP_REQUIRED');
+  if (!['input-snapshots-v1', 'output-files-v1', 'original-request-v1'].every(cap => skillClientCapabilities?.includes(cap))) throw Error('CLIENT_UPDATE_REQUIRED');
   const manifest = JSON.parse(await readFile(new URL('../agentpay.json',import.meta.url),'utf8'));
 
   // OPTIONAL: main is the default. Add another full reference under services in
@@ -86,6 +86,8 @@ try {
   // runSkill reports input, Wallet, payment and recovery errors itself.
   if (error?.message === 'SERVICE_ALIAS_REQUIRED') {
     console.log(JSON.stringify({ok:false,error:{code:'SERVICE_ALIAS_REQUIRED',message:'Choose a service alias declared in agentpay.json.'}}));
+  } else if (error?.message === 'CLIENT_UPDATE_REQUIRED') {
+    console.log(JSON.stringify({ok:false,error:{code:'CLIENT_UPDATE_REQUIRED',message:'Update AgentPay User before using this Skill; its shared client must support input snapshots, output files and original-request recovery.'}}));
   } else {
     console.log(JSON.stringify({ok:false,error:{code:'LOCAL_SETUP_REQUIRED',message:'Run AgentPay setup to prepare the local Runtime client. Use AGENTPAY_USER_DATA_DIR for a non-default data directory.'}}));
   }

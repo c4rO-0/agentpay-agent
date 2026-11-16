@@ -12,7 +12,8 @@ function normalizeModule(value) {
 
 function moduleToKind(moduleName) {
   if (moduleName === "serper") return "serper-search";
-  return "random";
+  if (moduleName === "random") return "random";
+  throw new Error("Unsupported AGENT_PROD_KIND; choose random or serper-search");
 }
 
 function parseCsv(value) {

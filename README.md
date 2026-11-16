@@ -29,8 +29,8 @@ exact application commands for credential loading, profile refresh and paid
 admission; successfully completed steps are reused. A local generation check
 alone is not an AgentPay-ready service.
 
-Full private human acceptance is pending;
-source tests do not establish public release readiness.
+Scoped private connection and paid-request acceptance exists. A fresh independent-host
+guided installation and broader recovery acceptance remain open; see [progress](progress.md).
 
 [Publish a Skill](doc/runbooks/skill-publishing.md) after preparing its package. Publication is independent of Provider trading admission.
 

@@ -7,8 +7,8 @@ npm ci
 npm test
 ```
 
-The reviewed public Protocol dependency is included with its provenance and MIT
-license. No sibling repository or platform database is needed for the local suite. See
+The exact public Protocol dependency is downloaded from npm; the lockfile pins
+its integrity and the package includes its license. No sibling repository or platform database is needed for the local suite. See
 [the test guide](../test/README.md) for focused commands and evidence limits.
 Tests use controlled services and temporary state; the reference application itself
 requires MySQL for installation/execution. See [database preparation](runbooks/provider-database.md).
@@ -25,27 +25,22 @@ of wallet keys and commercial policy, and validate Settlement identifiers.
 Tests must cover wrong binding, expiry, replay, usage overflow,
 receipt conflict, restart, and provider unavailability.
 
-## 托管身份启动定向回归
+## Focused verification
+
+Use [the test guide](../test/README.md) to select complete behaviors rather than
+running every test after each edit. For example:
 
 ```bash
-node --test test/provider-runtime-environment.test.mjs test/provider-host-config.test.mjs test/provider-service-state.test.mjs
+node --test test/provider-http-boundary.test.mjs test/native-provider-transport.test.mjs
+node --test test/provider-installation.test.mjs test/provider-service-state.test.mjs
+node --test test/native-alternate-orchestration.test.mjs test/skill-template.test.mjs
 ```
 
-覆盖未绑定本地准备、绑定后必须重新准备、稳定 skillId/变更 offerId 与
-profileHash、排除平台环境字段，以及 admitted 绑定/凭证检查。它不验证
-真实数据库、端点控制 API、Registry 登记或链上资金。受保护环境执行和
-参与者演练分别记录，不能用本地夹具通过替代。
-
-## Guided onboarding checks
-
-```bash
-node --test --experimental-test-isolation=none test/local-random-server.test.mjs test/provider-storage.test.mjs test/provider-installation.test.mjs test/provider-two-flows.test.mjs test/provider-onboarding.test.mjs test/provider-managed-process.test.mjs test/provider-host-config.test.mjs test/provider-service-client.test.mjs test/provider-binding-state.test.mjs test/provider-binding-startup.test.mjs test/provider-binding-time.test.mjs test/native-provider-quote.test.mjs test/provider-service-state.test.mjs test/provider-runtime-environment.test.mjs
-```
-
-The coordinator tests use the existing API clients with injected HTTP responses and
-owner-held temporary files. Process tests start/stop only their own temporary child.
-They do not operate the platform or prove Anvil/DB/human acceptance. Private
-operational records are not prerequisites for these controlled tests.
+HTTP boundary tests use real disposable server processes. Coordinator tests use
+controlled platform responses and owner-held temporary files. Native execution
+uses a simulated database/authority; it does not prove MySQL concurrency, chain
+funding or exactly-once effects. Do not add failure-injection switches to the
+serving runtime to make tests pass. Linux is the validated host for this review.
 
 ## Replacing the reference business
 

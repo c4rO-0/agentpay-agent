@@ -172,9 +172,8 @@ prefix. Declarations and downloaded Skills retain the public prefix. Changing
 this URL changes the service profile hash. Use a separate connection/service
 state and complete endpoint verification and service registration; existing
 state deliberately refuses a silent endpoint replacement. A matching Skill must
-be published for the changed service. Prepared dependency version is types
-0.11.1; install it during a coordinated stopped-service update, not underneath
-a running Provider.
+be published for the changed service. Install the exact dependency from the current lockfile during a coordinated
+service update, not underneath a running Provider.
 
 ## Delivery duration and disputed results
 
@@ -184,7 +183,8 @@ reference application reads `AGENT_NATIVE_SERVICE_WINDOW_SECONDS`; omission uses
 Settlement default. Quote expiry is separate. Duration starts at Order creation,
 including payment and acceptance waiting. No extension after creation is supported.
 Changing the offer affects only new Orders; fixed offer IDs cannot reuse changed
-content. Rolling reference offers include duration in their derived identity.
+content. Fixed and rolling reference offers include duration in their identity. After
+editing duration, deliberately prepare the service state before restarting.
 
 The reference service checks the protected case inbox about once a minute. From the Agent repository, use the default saved connection or add
 `--connection /your/private/connection.env` immediately after the script name:
@@ -249,8 +249,8 @@ server online and use **check** to see the result.
 For scripted operation with your existing host configuration:
 
 ```sh
-node scripts/provider-host.mjs /path/to/connection.env service revalidate
-node scripts/provider-host.mjs /path/to/connection.env service status
+node scripts/provider-host.mjs /path/to/host.env service revalidate
+node scripts/provider-host.mjs /path/to/host.env service status
 ```
 
 The same pending request is reused. A failed attempt does not restore registration;

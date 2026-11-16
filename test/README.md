@@ -23,3 +23,10 @@ Fixture configuration must declare its network explicitly. Input prompts should
 cover current decisions, including service duration. Do not restore production
 defaults to make old tests pass. Check required storage behavior rather than a fixed
 number of SQL statements. Never use real credentials or platform SQL for this suite.
+
+HTTP boundary regressions launch the normal server and verify malformed routes,
+body limits and shutdown without touching live services. Transport tests use local
+HTTP endpoints for response-body timeout and redirect refusal. Generic-template
+checks execute its script with a controlled installed client and missing/full
+capability sets; they do not invoke payment. Retired runtime probe environment
+variables must not alter execution, receipts or output hashes.

@@ -33,3 +33,20 @@ test("saved identity survives retries; changed offer requires preparation and ke
     await assert.rejects(prepareProviderServiceState(path, env), /regular/);
   } finally { await rm(dir, {recursive:true,force:true}); }
 });
+
+test("fixed-expiry duration changes create a new offer without replacing service identity", async () => {
+  const dir = await mkdtemp(join(tmpdir(), "provider-duration-"));
+  try {
+    const path = join(dir, "service.json");
+    const original = await prepareProviderServiceState(path, env);
+    const withDuration = {...env, AGENT_NATIVE_SERVICE_WINDOW_SECONDS:"900"};
+    await assert.rejects(loadProviderServiceState(path, withDuration), /changed/);
+    const changed = await prepareProviderServiceState(path, withDuration);
+    assert.equal(changed.skillId, original.skillId);
+    assert.notEqual(changed.offerId, original.offerId);
+    assert.deepEqual(await prepareProviderServiceState(path, withDuration), changed);
+    const reverted = await prepareProviderServiceState(path, env);
+    assert.equal(reverted.skillId, original.skillId);
+    assert.notEqual(reverted.offerId, changed.offerId);
+  } finally { await rm(dir, {recursive:true, force:true}); }
+});

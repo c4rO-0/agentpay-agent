@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {providerServiceUrls} from '../src/provider-service-urls.mjs';
 import { resolve, dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
@@ -53,7 +54,7 @@ async function guide(path, ops) {
       ui.write(`Local random generation passed. Your service is running at ${ops.origin}.\nInstallation file: ${path}\nNext: connect this service to AgentPay:\n${connectionCommand(path)}\nGet the public deployment config from the Market/operator.\nInstallation guide finished. You can close this terminal; the service stays running.`); return;
     }
     if (process.platform !== 'linux') {
-      ui.write(`Start in a separate terminal: node scripts/provider-install.mjs ${shellQuote(path)} start\nThen run: node scripts/provider-install.mjs ${shellQuote(path)} check\nManaged background startup currently supports Linux. These foreground commands work on macOS.\nInstallation guide finished; generation verification is still pending.`); return;
+      ui.write(`Start in a separate terminal: node scripts/provider-install.mjs ${shellQuote(path)} start\nThen run: node scripts/provider-install.mjs ${shellQuote(path)} check\nManaged background startup currently supports Linux. Other platforms have not been verified.\nInstallation guide finished; generation verification is still pending.`); return;
     }
     ui.heading('Choose an action');
     ui.write("* 'continue' Start and verify your local service\n  'details'  Show port and private process log\n  'q'        Quit; keep saved installation");
@@ -103,7 +104,7 @@ try {
     if (await privateText(ops.runtimePath, true) !== null) {
       const { env } = await resolveProviderRuntimeEnvironment(await loadProviderHostConfig(ops.runtimePath));
       const state = await ops.health();
-      if (!state || state.local || state.native.route !== `/services/${encodeURIComponent(env.AGENT_PROD_SERVICE_ID)}/agentpay/invoke` || state.native.skillId !== env.AGENT_NATIVE_SKILL_ID || state.native.profileHash !== env.AGENT_NATIVE_PROFILE_HASH || state.native.admissionState !== env.AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE)
+      if (!state || state.local || state.native.route !== providerServiceUrls(env.AGENT_PUBLIC_BASE_URL, env.AGENT_PROD_SERVICE_ID).publicPaymentPath || state.native.skillId !== env.AGENT_NATIVE_SKILL_ID || state.native.profileHash !== env.AGENT_NATIVE_PROFILE_HASH || state.native.admissionState !== env.AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE)
         throw new Error('Paid runtime is not running with the saved declaration. Rerun the application configure command.');
       ui.write(`Application health passed. Local mode: ${state.native.admissionState}.\nNo unpaid generation or Order was executed. Use the connection guide to verify platform readiness.`);
     } else { await ops.localCheck(); ui.write('Local random generation passed. Installation verification finished.\nAgentPay connection is a separate step.'); }

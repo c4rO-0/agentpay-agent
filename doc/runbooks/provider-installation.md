@@ -40,10 +40,10 @@ Process ownership is verified before signalling. A different process occupying t
 port is reported and left running. An admitted paid service requires draining and
 explicit confirmation before a restart or stop.
 
-For macOS, background management is not implemented. Use `INSTALL_CONFIG start`
-in one terminal and `INSTALL_CONFIG check` in another. The guide prints those
-commands and reports verification as pending until you run the check. The same
-foreground command can run the paid reference mode after its configuration is saved.
+Linux is the validated installation host. On other platforms, the guide can
+print foreground `INSTALL_CONFIG start` and `INSTALL_CONFIG check` commands, but
+this is not a claim of verified platform support. Background management there
+remains deferred.
 
 The local installation listener binds only `127.0.0.1`. `/random` is a local smoke
 test, without paid routes; do not publish it through a proxy. Configuring paid
