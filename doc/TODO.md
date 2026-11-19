@@ -1,5 +1,7 @@
 # Provider TODO
 
+- [x] Completed R11 consumer/state compatibility review. [Dispositions and evidence](security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
+
 ## Review closeout — 2026-11-16
 
 - [x] Cover responsibilities, public entries, execution/recovery, security,

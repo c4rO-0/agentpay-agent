@@ -1,5 +1,7 @@
 # Provider documentation
 
+- Completed R11 consumer/state compatibility review. [Dispositions and evidence](security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
+
 - [Service revalidation](plans/provider-revalidation.md) — implemented connection-tool behavior after prolonged offline time.
 
 | Reader | Start here |

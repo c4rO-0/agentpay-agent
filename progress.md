@@ -1,5 +1,9 @@
 # Provider progress
 
+## Compatibility supplement — 2026-11-19
+
+Completed R11 consumer/state compatibility review. [Dispositions and evidence](doc/security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
+
 ## Correction review — 2026-11-16
 
 Follow-up review found two omissions, now corrected: old duration-unaware state is
