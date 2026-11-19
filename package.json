@@ -6,7 +6,7 @@
   "dependencies": {
     "mysql2": "^3.15.3",
     "viem": "^2.48.8",
-    "@c4roa0/agentpay-protocol": "0.14.3"
+    "@c4roa0/agentpay-protocol": "0.14.4"
   },
   "scripts": {
     "start": "node src/index.mjs",

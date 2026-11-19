@@ -1,5 +1,9 @@
 # Provider progress
 
+## Protocol dependency — 2026-11-19
+
+The Provider now pins Protocol 0.14.4. A clean npm installation passed the private request conformance and native payment result tests.
+
 ## Compatibility supplement — 2026-11-19
 
 Completed R11 consumer/state compatibility review. [Dispositions and evidence](doc/security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
