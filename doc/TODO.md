@@ -5,7 +5,7 @@
 - [x] Review onboarding changes and document public routes, platform config download and host prerequisites.
 - [x] Correct publishing guide to source package 1.2.2.
 - [x] Statically trace independent Linux installation, MySQL, public routing and connection handoffs; remove private host paths from the systemd example. No separate host rehearsal is required for this stage.
-- [ ] Clarify pending-credential recovery when temporary login is selected with the reference installation; normal saved-session mode remains documented.
+- [x] Clarify pending-credential recovery when temporary login is selected with the reference installation; normal saved-session mode remains documented.
 
 - [x] Completed R11 consumer/state compatibility review. [Dispositions and evidence](security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
 
@@ -27,11 +27,9 @@
 
 ## Release work (not authorized by review)
 
-- [ ] Build/review candidate Agent template 0.1.2 and random package 1.2.2 artifacts;
-  publish through their existing Tag / Provider-download → Market paths.
-  Keep immutable published ZIPs and User's current official pin until acceptance.
-- [ ] Explicitly upgrade the exact Protocol dependency when its reviewed fixes are
-  released; record supported combinations, without adding a new capability framework.
+- [x] Build and publish random package 1.2.2 through Provider download → Market; operator reported publication success. Paid Base acceptance remains separate.
+- [ ] Review/publish generic template 0.1.2 through its version Tag; the last recorded template release remains v0.1.1. This is separate from the random Skill package.
+- [x] Pin Protocol 0.14.4 with lockfile integrity; clean installation and scoped conformance checks passed.
 - [ ] Establish public CI for independent installation, behavior and template integrity.
 
 ## Retained acceptance
@@ -45,8 +43,7 @@
 - [ ] Selected delivery duration/price, original-result retrieval, bounded evidence,
   withdrawal/order drain and financial outcomes with Settlement. Never regenerate
   costly work to answer an original-result retrieval request.
-- [ ] Prefixed endpoint registration and optional display introduction through the
-  actual platform. Controlled reference readiness tests are not remote registration.
+- [x] Reference service registered through its public path prefix and displayed on the platform; operator confirmed the published service. This does not claim every external proxy configuration.
 - [ ] Coordinate compatible User release, immutable Skill download and paid recovery
   for candidate packages. Template hook tests use controlled clients, not real payment.
 - [ ] Selected-network asset/profile/credentials and capped actual payment/service.
@@ -75,6 +72,6 @@ Private platform SQL/Market work stays with those projects; see
 
 ## Provider onboarding usability correction
 
-- [ ] Verify a fresh standalone installation through the documented commands, with its application configuration handoff and public reverse-proxy path.
+- [x] Review standalone installation instructions, application handoff and public proxy paths statically. Separate-machine execution is outside the agreed stage scope.
 - [ ] Verify resuming after credential issuance and after binding, without replacing an existing identity.
-- [ ] Clearly distinguish an application-managed installation from a service managed by the host administrator. Each incomplete step must name the required action and responsible operator.
+- [x] Clearly distinguish an application-managed installation from a service managed by the host administrator. Each incomplete step must name the required action and responsible operator.
