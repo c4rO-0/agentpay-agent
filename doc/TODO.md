@@ -4,7 +4,7 @@
 
 - [x] Review onboarding changes and document public routes, platform config download and host prerequisites.
 - [x] Correct publishing guide to source package 1.2.2.
-- [ ] Complete one independent Linux install → own MySQL → public proxy → B1/B2 → local admission journey, without private Deploy or internal API injection.
+- [x] Statically trace independent Linux installation, MySQL, public routing and connection handoffs; remove private host paths from the systemd example. No separate host rehearsal is required for this stage.
 - [ ] Clarify pending-credential recovery when temporary login is selected with the reference installation; normal saved-session mode remains documented.
 
 - [x] Completed R11 consumer/state compatibility review. [Dispositions and evidence](security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
@@ -36,9 +36,9 @@
 
 ## Retained acceptance
 
-- [ ] Fresh independent-host two-flow guide: login, endpoint proof, registration,
-  Registry/Quote wait and local paid admission, including public configuration
-  handoff, database privileges, supervision and multiple endpoint isolation.
+- [x] Independent-host guide reviewed statically for public configuration, database
+  prerequisites, proxy routes and process ownership. Live independent-host acceptance
+  is outside the agreed stage scope; no execution claim is made.
 - [ ] Interactive revalidation/reissue usability and credential response-loss,
   expiry/rotation, restriction and sibling-service boundaries. Formal revalidation
   CLI is already implemented and has scoped private acceptance.

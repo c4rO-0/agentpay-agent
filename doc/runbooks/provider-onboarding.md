@@ -7,8 +7,8 @@ A Market client-Skill listing is separate and is not required for trading.
 
 For an independent server, start with [public hosting](public-provider.md), then [installation](provider-installation.md).
 The two flows, automatic Registry qualification and local paid preparation have
-private same-host execution evidence. Independent-host acceptance and broader
-recovery remain open. Later guide corrections have focused source tests;
+private same-host execution evidence. Independent hosting is reviewed statically; broader
+recovery evidence remains separate. Later guide corrections have focused source tests;
 those tests do not replace a human walkthrough.
 
 ## What you need

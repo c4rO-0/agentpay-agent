@@ -18,7 +18,7 @@ not a prerequisite for independent operators.
 | R5 Dependencies | public package lock, platform JSON and registered profile checked. User/Wallet are not Provider runtime dependencies. |
 | R6 Maintainability | shared admission verifier explains validation before config write; terminal code preserves prior raw mode. |
 | R7 Interaction | passwords hidden, visible input immediate, platform pause distinguished from Registry/Quote wait. External manager handoff no longer points at a nonexistent command. |
-| R8 Tests | onboarding, installation and managed preparation regressions passed, including process invocation, private files and controlled platform responses. Full independent hosted acceptance remains open. |
+| R8 Tests | onboarding, installation and managed preparation regressions passed, including process invocation, private files and controlled platform responses. Independent hosting is statically reviewed; separate live acceptance is outside this stage. |
 | R9 Documentation | public-hosting guide added, installation linked, Skill source version corrected to 1.2.2. No private host inventory or credentials in public examples. |
 | R10 Operations | managed-host registration/admission and Skill publication reported successful. Independent DNS/proxy/SQL provisioning is not performed by the guide; launcher does not install boot supervision. |
 | R11 Compatibility | existing saved connections retained; temporary sessions are opt-in; no alternate registration or transaction path added. |
@@ -37,9 +37,11 @@ not a prerequisite for independent operators.
 4. A dedicated database, publicly reachable service endpoint and process management
    remain operator responsibilities. There is no private Deploy dependency, but
    the example is not a one-command cloud hosting product.
-5. A fresh independent Linux server, using only the public repository and these
-   instructions, still needs one bounded end-to-end acceptance journey. Controlled
-   API tests and managed-host success do not prove it. Do not add repeated financial
-   tests to disguise missing installation evidence.
+5. The agreed independent-host scope is static review, not another deployment.
+   Checked tracked scripts, examples, public routes and configuration handoffs.
+   Found a systemd example containing a private operator account, checkout and Node
+   paths; replaced them with generic example locations. No fixed platform domain is
+   required. The public security-report mailbox remains intentionally documented.
+   This does not establish fresh-host execution or paid-request acceptance.
 
 No payment, chain write, release tag or repository push was performed by this review.

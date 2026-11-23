@@ -30,8 +30,8 @@ System-service paths are deployment choices, not Provider interface requirements
 The application-owned `provider-install.mjs INSTALL_CONFIG configure CONNECTION_CONFIG`
 command now loads credentials, prepares the canonical declaration and checks local
 paid admission. It uses its own SQL configuration; the connection coordinator
-only displays the handoff. Human walkthrough, real SQL/platform handoffs and
-independent-host acceptance are still pending. See [progress](../progress.md) and
+only displays the handoff. Independent-host prerequisites and handoffs have been reviewed statically;
+this is not a claim of fresh-host execution. See [progress](../progress.md) and
 [TODO](TODO.md). Existing private purchases do not prove those new flows.
 
 For an existing host managed by systemd or another process manager, use:

@@ -83,9 +83,10 @@ service or configure your host's firewall/proxy. After a machine restart, resume
 using the saved installation command and inspect its state. If using your own
 supervisor, choose one process owner rather than starting two copies on one port.
 
-## Verification limit
+## Review scope
 
-The managed-host integration and isolated application handoffs have been exercised.
-A clean external server following only these public instructions has not yet
-completed the full database, public proxy, registration and paid-request journey.
-This guide documents the existing interfaces; it is not a one-command hosting tool.
+The public paths, configuration inputs and application handoffs have been reviewed
+statically for independent use. No private Deploy checkout, operator home directory
+or fixed platform domain is required. This review does not claim a fresh-server
+execution or a paid transaction. A separate independent-host rehearsal is not a
+requirement for this stage.

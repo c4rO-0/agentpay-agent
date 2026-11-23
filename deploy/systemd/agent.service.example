@@ -1,3 +1,6 @@
+# Illustrative direct-runtime unit. Replace account, checkout and Node paths.
+# This does not configure paid service identity, storage or credentials.
+# Follow doc/runbooks/public-provider.md before exposing any routes.
 [Unit]
 Description=AgentPay Agent Service
 After=network-online.target
@@ -5,16 +8,16 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=bsplu
-Group=wheel
-WorkingDirectory=/home/workspace/agentpay/agent
+User=agentpay-provider
+Group=agentpay-provider
+WorkingDirectory=/opt/agentpay-agent
 
 # Runtime inputs
 Environment=NODE_ENV=production
-Environment=APP_DIR=/home/workspace/agentpay/agent
-Environment=PATH=/home/bsplu/.nvm/versions/node/v24.14.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=APP_DIR=/opt/agentpay-agent
+Environment=PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-ExecStart=/home/bsplu/.nvm/versions/node/v24.14.0/bin/node /home/workspace/agentpay/agent/src/index.mjs
+ExecStart=/usr/bin/node /opt/agentpay-agent/src/index.mjs
 
 Restart=always
 RestartSec=3

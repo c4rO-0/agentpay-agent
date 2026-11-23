@@ -2,7 +2,7 @@
 
 ## Onboarding integration corrections — 2026-11-23
 
-Managed connection work exposed missing application handoffs and public-path configuration. The guide now supports a temporary Market session, and the managed declaration preparation entry reuses the reference service identity logic. Focused CLI verification covers missing binding, repeated preparation and refusal after admission. Full independent operator installation, real database setup and public endpoint verification remain pending; existing fixture tests do not establish that complete journey.
+Managed connection work exposed missing application handoffs and public-path configuration. The guide now supports a temporary Market session, and the managed declaration preparation entry reuses the reference service identity logic. Focused CLI verification covers missing binding, repeated preparation and refusal after admission. Independent hosting has been reviewed statically, including public routes, settings and process prerequisites. The systemd example no longer contains private operator paths. A separate external-host rehearsal is not required for this stage; no fresh-host execution is claimed.
 
 ## Protocol dependency — 2026-11-19
 

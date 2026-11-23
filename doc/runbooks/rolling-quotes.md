@@ -38,8 +38,8 @@ successfully observe the Quote. Its freshness/admission checks still apply.
 An online endpoint alone is not sufficient to establish purchase readiness.
 
 The private rolling-quote verification (not distributed)
-documents the completed existing-host run. Independent-host onboarding, outage recovery and public-network acceptance remain
-separate work. No routine per-order owner signature is introduced.
+documents the completed existing-host run. Independent-host onboarding has a static review; outage recovery and paid-network
+verification are separate evidence. No routine per-order owner signature is introduced.
 
 ## Upgrading older saved service state
 
