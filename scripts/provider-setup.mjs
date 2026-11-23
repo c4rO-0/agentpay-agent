@@ -84,16 +84,18 @@ async function createConfig(directory, source, installationPath) {
   if(installed) await savePrivate(`${path}.reference.json`,JSON.stringify({version:1,installationPath:resolve(installationPath)})+'\n');
   await savePrivate(path,encodeConfig(env),{create:true}); await rm(draftPath,{force:true}); return path;
 }
-let lock;
+let lock, ops;
 try {
   const args=process.argv.slice(2);let source,installationPath;
+  const temporarySession=args.includes('--temporary-session');
+  if(temporarySession) args.splice(args.indexOf('--temporary-session'),1);
   const i=args.indexOf('--deployment');if(i!==-1){source=args[i+1];if(!source)throw new Error('--deployment requires a public file/URL');args.splice(i,2);}
   const j=args.indexOf('--installation');if(j!==-1){installationPath=args[j+1];if(!installationPath)throw new Error('--installation requires your installation.env path');args.splice(j,2);}
   if(!args.length||args.length>2||(args[0]==='--new'&&args.length!==2)||(args[0]!=='--new'&&args[1]&&args[1]!=='--status')) throw new Error('Usage: provider-setup.mjs CONNECTION_CONFIG [--status] | --new PRIVATE_DIRECTORY [--deployment PUBLIC_CONFIG] [--installation INSTALL_CONFIG]');
   if(installationPath&&args[0]!=='--new') throw new Error('--installation is only used when creating a new connection');
   if(source&&args[0]!=='--new') throw new Error('--deployment is only used when creating a new connection');
   const path=args[0]==='--new'?await createConfig(args[1],source,installationPath):resolve(args[0]);
-  const ops=await createProviderOnboarding(path);
+  ops=await createProviderOnboarding(path,{temporarySession});
   if(args[1]==='--status'){const state=await ops.inspect();renderProviderStatus(ui,state);process.exitCode=state.complete?0:2;}
   else{
     await privateDirectory(dirname(path));lock=`${path}.guide.lock`;
@@ -102,4 +104,8 @@ try {
     await runProviderGuide(ops,ui);
   }
 }catch(error){ui.write(`AgentPay connection paused: ${error.message}`);process.exitCode=1;}
-finally{if(lock)await rm(lock,{force:true});}
+finally{
+  try { await ops?.session().close(); }
+  catch { ui.write('Market sign-out could not be confirmed. The temporary session was discarded locally.');process.exitCode=1; }
+  finally { if(lock)await rm(lock,{force:true}); }
+}

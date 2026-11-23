@@ -5,7 +5,7 @@ service declaration and checks Registry/Quote status. It assumes your service is
 already fully installed and running, including its implementation storage. It never reads its database or manages its process.
 A Market client-Skill listing is separate and is not required for trading.
 
-For local reference installation, start with [installation](provider-installation.md).
+For an independent server, start with [public hosting](public-provider.md), then [installation](provider-installation.md).
 The two flows, automatic Registry qualification and local paid preparation have
 private same-host execution evidence. Independent-host acceptance and broader
 recovery remain open. Later guide corrections have focused source tests;
@@ -111,6 +111,16 @@ No Order or payment is created by this guide. On completion, prepare and publish
 binding record live in the chosen owner-only directory. Optional
 `connection.env.reference.json` contains only the installation-path handoff. Files are `0600`, directory
 `0700`. Installation files remain separate. No platform file is loaded.
+
+For an externally managed service host, add `--temporary-session` to the guide command to keep
+the Market login in memory. Enter your password again when you resume. The guide
+requests sign-out on exit. The Provider credential and binding remain in the
+private directory for service use.
+
+The reference `--installation` configuration flow may need the saved Market session
+when replacing a pending credential. Keep its normal saved-session mode for that
+flow; temporary-session mode is intended for an external service manager that owns
+the credential handoff.
 
 To correct a connection input, quit and edit this connection file only. Restore
 matching public metadata when changing the platform. Changing account or endpoint
@@ -258,3 +268,17 @@ correct the reported issue before trying again. New attempts are limited to one 
 endpoint credential every ten minutes. Proofs expire after fifteen minutes.
 An expired or revoked credential requires the existing credential recovery flow first.
 This does not cancel old Orders, replace your service identity or rotate credentials.
+
+
+## If the guide asks an administrator to configure the service
+
+The reference installation prints a configuration command when started with
+`--installation /absolute/path/installation.env`. Use the connection command
+printed by the installation guide so that this association is saved.
+
+For an existing service owned by a system service manager, the host administrator
+loads the issued credential and configures the public service declaration through
+that manager. The public base must include the proxy prefix used in the MCP URL.
+The proxy must serve the endpoint challenge before service registration can finish.
+Choose `ready` after the required configuration has loaded. The next status check
+reports whether the public declaration and running service agree.

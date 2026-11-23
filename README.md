@@ -2,7 +2,7 @@
 
 A reference paid random-number Provider and editable Skill template for service developers.
 
-For service operators and Skill publishers. This reference Provider offers paid services, keeps its own credentials and execution state, and submits only required payment evidence to Settlement.
+For service operators and Skill publishers. Start with [running on your own server](doc/runbooks/public-provider.md) for prerequisites and public routing. This reference Provider offers paid services, keeps its own credentials and execution state, and submits only required payment evidence to Settlement.
 
 ## Install and use
 

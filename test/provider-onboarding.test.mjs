@@ -11,7 +11,7 @@ import { saveProviderBinding } from '../src/provider-binding-state.mjs';
 import { createMarketSession } from '../src/provider-market-session.mjs';
 import { createProviderBindingRuntime } from '../src/provider-binding-runtime.mjs';
 const ok = result => new Response(JSON.stringify({ ok: true, result }));
-async function fixture({ admitted = true, registeredInitially = true, pending = false, expired = false, qualified = true, fresh = true, restricted = false, qualificationCheck = null } = {}) {
+async function fixture({ admitted = true, registeredInitially = true, pending = false, expired = false, qualified = true, fresh = true, restricted = false, paused = false, qualificationCheck = null } = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'provider-connection-')), path = join(dir, 'connection.env');
   const env = { MARKET_BASE_URL: 'https://market.example', SETTLEMENT_BASE_URL: 'https://settlement.example', MARKET_EMAIL: 'provider@example.com',
     MARKET_SESSION_TOKEN_FILE: join(dir, 'session'), AGENT_PROD_SERVICE_ID: 'random', AGENT_MCP_ENDPOINT: 'https://provider.example/services/random/mcp/invoke',
@@ -41,7 +41,7 @@ async function fixture({ admitted = true, registeredInitially = true, pending = 
     if (url.pathname.endsWith('/agentpay/invoke')) return new Response(JSON.stringify({ version: 'agentpay.service-payment-required.v1', resource: {url:profile.paymentEndpoint, method:'POST'},
       requirement: { skillId, profileHash: mismatch ? `0x${'4'.repeat(64)}` : profileHash, seller:profile.seller, network:profile.network, asset:profile.asset } }), {status:402});
     if (url.pathname.endsWith('/services/read')) return ok({ registered, qualificationCheck, profile: registered ? profile : null, serviceStatus: {qualification:{qualificationStatus:qualified?'qualified':'not_qualified'},quote:{quoteStatus:fresh?'fresh':'missing'}} });
-    if (url.pathname.endsWith('/purchase-readiness')) return ok({ commercialReady:registered&&qualified&&fresh&&!restricted, blockers:restricted?['PROVIDER_RESTRICTED']:qualified?[]:['REGISTRY_QUALIFICATION_INVALID'], quote:registered ? {providerId:profile.providerId,skillId,profileHash}:null });
+    if (url.pathname.endsWith('/purchase-readiness')) return ok({ commercialReady:registered&&qualified&&fresh&&!restricted&&!paused, blockers:paused?['NEW_ORDERS_PAUSED']:restricted?['PROVIDER_RESTRICTED']:qualified?[]:['REGISTRY_QUALIFICATION_INVALID'], quote:registered ? {providerId:profile.providerId,skillId,profileHash}:null });
     if (url.pathname.endsWith('/services/register')) { writes.push('register'); if(failRegister) throw new Error('registration down'); registered=true; return ok({skillId,profileHash,...profile}); }
     throw new Error(`Unexpected request: ${url.pathname}`);
   };
@@ -219,4 +219,35 @@ test('qualified service with missing Quote offers status check, without re-regis
 
 test('platform restriction explains new-Order suspension without asking to re-register',async()=>{
  const f=await fixture({restricted:true});try{const ui=screen(['q']);await runProviderGuide(f.ops,ui);assert.match(ui.text.join('\n'),/Service suspended/);assert.match(ui.text.join('\n'),/Existing Orders continue/);assert.doesNotMatch(ui.text.join('\n'),/Waiting for service readiness|Wait about a minute/);assert.deepEqual(f.writes,[]);}finally{await f.cleanup();}
+});
+
+test('temporary guide login leaves an existing saved session untouched and signs out its own session', async t => {
+  const dir = await mkdtemp(join(tmpdir(), 'provider-login-'));
+  t.after(() => rm(dir, {recursive:true, force:true}));
+  const path = join(dir, 'session');
+  await writeFile(path, 'previous-session\n', {mode:0o600});
+  const env = {MARKET_BASE_URL:'https://market.example', MARKET_SESSION_TOKEN_FILE:path, MARKET_EMAIL:'provider@example.com'};
+  const calls = [];
+  const developer = {id:'provider',email:env.MARKET_EMAIL};
+  const session = createMarketSession({env, temporary:true, fetchImpl:async (url, options) => {
+    calls.push([new URL(url).pathname, options.headers.authorization]);
+    return ok({developer, sessionToken:'temporary-session', revoked:true});
+  }});
+  assert.equal((await session.inspect()).state, 'missing');
+  await session.login('fixture-password');
+  assert.equal((await session.inspect()).state, 'valid');
+  await session.close();
+  assert.equal((await session.inspect()).state, 'missing');
+  assert.deepEqual(calls, [['/developers/login',undefined],['/developers/me','Bearer temporary-session'],['/developers/logout','Bearer temporary-session']]);
+  assert.equal(await readFile(path,'utf8'), 'previous-session\n');
+});
+
+test('platform pause gives an operator action instead of asking to wait for quote checks',async()=>{
+ const f=await fixture({paused:true});
+ try{
+  const ui=screen(['q']);await runProviderGuide(f.ops,ui);
+  assert.match(ui.text.join('\n'),/Platform is paused for new Orders/);
+  assert.doesNotMatch(ui.text.join('\n'),/Wait about a minute/);
+  assert.deepEqual(f.writes,[]);
+ }finally{await f.cleanup();}
 });

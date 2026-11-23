@@ -1,5 +1,9 @@
 # Provider progress
 
+## Onboarding integration corrections — 2026-11-23
+
+Managed connection work exposed missing application handoffs and public-path configuration. The guide now supports a temporary Market session, and the managed declaration preparation entry reuses the reference service identity logic. Focused CLI verification covers missing binding, repeated preparation and refusal after admission. Full independent operator installation, real database setup and public endpoint verification remain pending; existing fixture tests do not establish that complete journey.
+
 ## Protocol dependency — 2026-11-19
 
 The Provider now pins Protocol 0.14.4. A clean npm installation passed the private request conformance and native payment result tests.
@@ -33,9 +37,9 @@ records; Settlement remains the authorization and commercial authority.
 
 | Component | Current state |
 | --- | --- |
-| Protocol dependency | Exact public npm 0.14.3 and lockfile integrity; no sibling checkout |
+| Protocol dependency | Exact public npm 0.14.4 and lockfile integrity; no sibling checkout |
 | Agent / generic template | Source candidate 0.1.2; last recorded published template tag v0.1.1 |
-| Random Skill | Source candidate 1.2.2; last recorded deployed/published and paid-tested package 1.2.1 |
+| Random Skill | Source/deployed 1.2.2; publication reported successful; Base paid test pending |
 | This review | Local source, comments and documentation; no tag, push, deployment or purchase |
 
 Candidate template/example loaders follow the active User installation and retain
@@ -59,7 +63,12 @@ MySQL contention, arbitrary external business recovery or mainnet safety.
 
 ## Next
 
-Commit this review, then continue the platform review in dependency order. Release
+[Onboarding review](doc/security/onboarding-correction-review-2026-11-23.md) and
+[public hosting guide](doc/runbooks/public-provider.md) distinguish managed-host
+acceptance from the remaining independent installation journey.
+
+
+Current stage review is ready for a scoped commit. Release
 candidate templates only after artifact review and explicit publication approval;
 never replace an existing version's ZIP or silently change User's official digest.
 Remaining acceptance and deferred work are in [TODO](doc/TODO.md). The earlier

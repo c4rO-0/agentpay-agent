@@ -1,5 +1,12 @@
 # Provider TODO
 
+## Independent Provider follow-up
+
+- [x] Review onboarding changes and document public routes, platform config download and host prerequisites.
+- [x] Correct publishing guide to source package 1.2.2.
+- [ ] Complete one independent Linux install → own MySQL → public proxy → B1/B2 → local admission journey, without private Deploy or internal API injection.
+- [ ] Clarify pending-credential recovery when temporary login is selected with the reference installation; normal saved-session mode remains documented.
+
 - [x] Completed R11 consumer/state compatibility review. [Dispositions and evidence](security/compatibility-review-2026-11-19.md). Retained historical recovery and published interfaces have explicit exit conditions; no release or deployment.
 
 ## Review closeout — 2026-11-16
@@ -64,3 +71,10 @@ acceptance, revalidation implementation and public Protocol distribution are com
 within the evidence described in [progress](../progress.md); they are not new tasks.
 Private platform SQL/Market work stays with those projects; see
 [backlog scope](reference/documentation-backlog.md).
+
+
+## Provider onboarding usability correction
+
+- [ ] Verify a fresh standalone installation through the documented commands, with its application configuration handoff and public reverse-proxy path.
+- [ ] Verify resuming after credential issuance and after binding, without replacing an existing identity.
+- [ ] Clearly distinguish an application-managed installation from a service managed by the host administrator. Each incomplete step must name the required action and responsible operator.

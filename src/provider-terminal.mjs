@@ -4,9 +4,11 @@ import { StringDecoder } from 'node:string_decoder';
 export function terminal({ input = process.stdin, output = process.stdout } = {}) {
   async function ask(prompt, { secret = false } = {}) {
     if (!input.isTTY) throw new Error('Provider guide requires an interactive terminal');
-    output.write(`${prompt}\n> `);
-    input.setRawMode(true); input.resume();
+    const wasRaw = !!input.isRaw;
+    input.setRawMode(true);
     try {
+      output.write(`${prompt}\n> `);
+      input.resume();
       return await new Promise((resolve, reject) => {
         let value = ''; const decoder = new StringDecoder('utf8');
         function finish(error) { input.off('data', onData); output.write('\n'); error ? reject(error) : resolve(secret ? value : value.trim()); }
@@ -21,7 +23,7 @@ export function terminal({ input = process.stdin, output = process.stdout } = {}
         }
         input.on('data', onData);
       });
-    } finally { input.setRawMode(false); input.pause(); }
+    } finally { input.pause(); input.setRawMode(wasRaw); }
   }
   const write = text => output.write(`${text}\n`);
   const heading = text => write(`\n------------------------------------------------------------\n> ${text}\n------------------------------------------------------------`);

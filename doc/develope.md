@@ -55,6 +55,17 @@ serving runtime to make tests pass. Linux is the validated host for this review.
   result is saved because it has no external effect; do not copy that assumption
   to email, purchases or infrastructure provisioning.
 
+The random-number example quotes one unit by default. A request supplies two
+integer bounds and generates exactly one number. A wider range costs the same
+one unit. For a batch service, define what one unit buys and check the requested
+batch size against both the Order’s authorized units and your available capacity
+before accepting the Order. Reject work you cannot fulfill through the service
+authorization decision. Check a new Order before acceptance and preserve the
+original decision when recovering an already accepted Order. The final usage
+check happens after execution, when an external API call may already have cost you
+money. Concurrent Orders also share capacity, so a per-Order cap alone does not
+reserve a worker or protect a shared downstream quota.
+
 The shared layer serializes an Order with a dedicated MySQL advisory-lock
 connection, persists output/hash/actual usage, and retries its stable receipt.
 A crash releases the lock; a lock does not prove exactly-once external effects.

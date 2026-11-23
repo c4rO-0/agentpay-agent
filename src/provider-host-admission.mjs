@@ -6,14 +6,7 @@ import {createProviderServiceClient} from './provider-service-client.mjs';
 
 // Application configuration for an existing externally managed host. This never
 // creates service IDs, registers a service, changes price, or manages a process.
-export async function configureProviderHostAdmission(path,{fetchImpl=fetch}={}){
- await loadProviderHostConfig(path);
- const lock=path+'.configure.lock';
- await writeFile(lock,String(process.pid)+'\n',{flag:'wx',mode:0o600});
- try{
-  const before=await privateText(path),values=await loadProviderHostConfig(path);
-  // Enabling requires the same binding and both credential files that startup
-  // will use; validate them before persisting any configuration.
+export async function verifyProviderHostAdmission(values,{fetchImpl=fetch}={}){
   const {env}=await resolveProviderRuntimeEnvironment({...values,AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted'});
   const service=createProviderServiceClient({settlementBaseUrl:env.SETTLEMENT_BASE_URL,serviceId:env.AGENT_PROD_SERVICE_ID,
    mcpEndpoint:env.AGENT_MCP_ENDPOINT,skillId:env.AGENT_NATIVE_SKILL_ID,profileHash:env.AGENT_NATIVE_PROFILE_HASH,
@@ -26,6 +19,18 @@ export async function configureProviderHostAdmission(path,{fetchImpl=fetch}={}){
    ||state.registration.serviceStatus?.quote?.quoteStatus!=='fresh'||state.readiness?.commercialReady!==true){
    throw Object.assign(Error('Paid service is not ready. Run service status and resolve the reported blockers; configuration was kept.'),{code:'PROVIDER_NOT_READY'});
   }
+  return state;
+}
+
+export async function configureProviderHostAdmission(path,{fetchImpl=fetch}={}){
+ await loadProviderHostConfig(path);
+ const lock=path+'.configure.lock';
+ await writeFile(lock,String(process.pid)+'\n',{flag:'wx',mode:0o600});
+ try{
+  const before=await privateText(path),values=await loadProviderHostConfig(path);
+  // Enabling requires the same binding and both credential files that startup
+  // will use; validate them before persisting any configuration.
+  const state=await verifyProviderHostAdmission(values,{fetchImpl});
   if(await privateText(path)!==before)throw Error('Configuration changed during verification; retry with the current file');
   const changed=values.AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE!=='admitted';
   if(changed)await savePrivate(path,encodeConfig({...values,AGENTPAY_NATIVE_PROVIDER_ADMISSION_STATE:'admitted'}));

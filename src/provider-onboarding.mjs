@@ -4,7 +4,6 @@ import { fileURLToPath } from "node:url";
 import { paymentEndpointForService } from "@c4roa0/agentpay-protocol";
 import { loadProviderConnectionConfig } from "./provider-connection-config.mjs";
 import {
-  readPrivateFile,
   createProviderBindingClient,
 } from "./provider-binding-client.mjs";
 import { createProviderServiceClient } from "./provider-service-client.mjs";
@@ -48,7 +47,7 @@ export function localReady(state, runtime) {
 // database, identifiers, prices or admission configuration.
 export async function createProviderOnboarding(
   configPath,
-  { fetchImpl = fetch } = {},
+  { fetchImpl = fetch, temporarySession = false } = {},
 ) {
   const repository = fileURLToPath(new URL("..", import.meta.url));
   const path = relative(repository, configPath);
@@ -114,7 +113,8 @@ export async function createProviderOnboarding(
         "Ask your service administrator to load the credential and canonical declaration using your application tools.",
       );
   }
-  const session = () => createMarketSession({ env, fetchImpl });
+  const marketSession = createMarketSession({env, fetchImpl, temporary: temporarySession});
+  const session = () => marketSession;
   async function bindingClient(
     credentialFile = env.AGENT_PROVIDER_BINDING_CREDENTIAL_FILE,
   ) {
@@ -122,10 +122,7 @@ export async function createProviderOnboarding(
       marketBaseUrl: env.MARKET_BASE_URL,
       settlementBaseUrl: env.SETTLEMENT_BASE_URL,
       mcpEndpoint: env.AGENT_MCP_ENDPOINT,
-      sessionToken: await readPrivateFile(
-        env.MARKET_SESSION_TOKEN_FILE,
-        "Market session",
-      ),
+      sessionToken: (await marketSession.readToken())?.trim(),
       credentialFile,
       bindingStateFile: env.AGENT_PROVIDER_BINDING_STATE_FILE,
       providerControlUrl: env.AGENT_PROVIDER_CONTROL_URL,
@@ -324,12 +321,12 @@ export async function createProviderOnboarding(
   }
   async function errorMessage(error) {
     let message = String(error.message || "Connection operation failed");
-    for (const path of [
-      env.MARKET_SESSION_TOKEN_FILE,
-      env.AGENT_PROVIDER_BINDING_CREDENTIAL_FILE,
+    for (const read of [
+      () => marketSession.readToken(),
+      () => privateText(env.AGENT_PROVIDER_BINDING_CREDENTIAL_FILE, true),
     ]) {
       try {
-        const secret = (await privateText(path, true))?.trim();
+        const secret = (await read())?.trim();
         if (secret) message = message.split(secret).join("[redacted]");
       } catch {}
     }
@@ -480,6 +477,9 @@ export async function runProviderGuide(ops, ui) {
           ? "Registry qualification is confirmed, but Provider local paid admission is not ready. Load your application settings; do not repeat binding."
           : "Endpoint control is verified. Your service must load the verified identity before registration.",
       );
+    } else if (registered && state.service?.readiness?.blockers?.includes("NEW_ORDERS_PAUSED")) {
+      ui.heading("Platform is paused for new Orders");
+      ui.write("The platform operator must reopen Orders before connection can finish. Your registration is saved. Choose 'check' after the operator confirms reopening.");
     } else if (registered && !state?.platformComplete) {
       ui.heading("Waiting for service readiness");
       ui.write(
@@ -542,7 +542,9 @@ export async function runProviderGuide(ops, ui) {
     if (action === "configure" && needsConfiguration) {
       ops.handoff(ui);
       const answer = await ui.ask(
-        "Run the application command above. Type 'ready' when it finishes, or 'q' to return",
+        ops.applicationCommand
+          ? "Run the application command above. Type 'ready' when it finishes, or 'q' to return"
+          : "Have your service administrator load the service settings. Type 'ready' after configuration, or 'q' to return",
       );
       if (answer !== "ready")
         ui.write(

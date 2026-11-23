@@ -2,12 +2,14 @@ import {serviceBase,serviceUrl} from './service-url.mjs';
 import { privateText, savePrivate, privateDirectory } from './provider-private-files.mjs';
 import { dirname } from 'node:path';
 
-export function createMarketSession({ env, fetchImpl = fetch }) {
+export function createMarketSession({ env, fetchImpl = fetch, temporary = false }) {
   const base=serviceBase(env.MARKET_BASE_URL,'Market URL');
   const path = env.MARKET_SESSION_TOKEN_FILE;
   if (!path?.startsWith('/')) throw new Error('Market session file must use an absolute private path');
+  let inMemory = null;
+  const readToken = () => temporary ? inMemory : privateText(path, true);
   async function inspect() {
-    const text = await privateText(path, true);
+    const text = await readToken();
     if (text === null) return { state: 'missing' };
     const token = text.trim();
     if (!token) throw new Error('Market session file is empty');
@@ -33,8 +35,20 @@ export function createMarketSession({ env, fetchImpl = fetch }) {
         typeof body.result.developer?.id !== 'string' || !body.result.developer.id)
       throw new Error(`Market login rejected (${response.status}); check your account and password`);
     if (body.result.developer?.email?.toLowerCase() !== env.MARKET_EMAIL.toLowerCase()) throw new Error('Market returned another account');
-    await savePrivate(path, `${body.result.sessionToken}\n`, { create: state.state === 'missing' });
+    if (temporary) inMemory = body.result.sessionToken;
+    else await savePrivate(path, `${body.result.sessionToken}\n`, { create: state.state === 'missing' });
     return { state: 'valid', accountId: body.result.developer.id };
   }
-  return { inspect, login };
+  async function close() {
+    if (!inMemory) return;
+    const token = inMemory;
+    inMemory = null;
+    const response = await fetchImpl(serviceUrl(base, '/developers/logout'), {
+      method: 'POST', redirect: 'error', headers: {authorization: `Bearer ${token}`},
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!response.ok || (await response.json()).result?.revoked !== true)
+      throw new Error('Market could not confirm sign-out. The local session was discarded.');
+  }
+  return { inspect, login, readToken, close };
 }

@@ -15,6 +15,8 @@
 
 ## Operational references
 
+- [Run on your own server](runbooks/public-provider.md)
+
 - [Execution database preparation](runbooks/provider-database.md)
 - [Rolling quotes](runbooks/rolling-quotes.md)
 
@@ -25,6 +27,8 @@ repository. Current progress describes evidence limits, not instructions to repe
 old deployments or resets.
 
 ## Review and history
+
+- [Onboarding correction review](security/onboarding-correction-review-2026-11-23.md).
 
 - [2026-11-16 static review](security/mainnet-static-review-2026-11-16.md): findings,
   corrections and the limits of local evidence.
